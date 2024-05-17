@@ -22,8 +22,8 @@ jobs:
           name: Detect changed plan files
           id: detect-changed-files
           command: |
-            git fetch origin master
-            changed_files=$(git diff --name-only origin/master...HEAD | grep -E '\.plan\.yaml$' || true)
+            git fetch origin main
+            changed_files=$(git diff --name-only origin/main...HEAD | grep -E '\.plan\.yaml$' || true)
             echo "Changed plan files:"
             echo "$changed_files"
             echo "$changed_files" > changed_files.txt
