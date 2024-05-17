@@ -1,0 +1,80 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Module",
+            "type": "python",
+            "request": "launch",
+            "module": "app",
+            "cwd": "${workspaceFolder}",
+            "justMyCode": true
+        },
+        {
+            "name": "Python: Debug app.py",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/stream_lit/app.py",
+            "cwd": "${workspaceFolder}/stream_lit",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "env": {}
+        },
+        {
+            "name": "Pytest",
+            "type": "python",
+            "request": "launch",
+            "module": "pytest",
+            "args": [
+                "-svv",
+                "testing_side_effect_pytest.py"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Streamlit",
+            "type": "python",
+            "request": "launch",
+            "module": "streamlit",
+            "console": "integratedTerminal",
+            "args": [
+                "run",
+                "${file}",
+                "--server.port=8501",
+                "--server.address=0.0.0.0"
+            ],
+            "justMyCode": true
+        },
+        {
+            "name": "File with Arguments",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": [
+                "-e",
+                "caiso", // Example argument 1
+                "-a",
+                "deploy",
+                "-v",
+                "v0.0.1",
+                "-st",
+                "all",
+                "-sch",
+                "platform"
+            ],
+            "env": {},
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

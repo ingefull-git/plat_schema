@@ -1,0 +1,5 @@
+BEGIN;
+
+ALTER TABLE platform.users ADD COLUMN is_admin BOOLEAN DEFAULT FALSE;
+
+COMMIT;

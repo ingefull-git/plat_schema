@@ -1,0 +1,6 @@
+database:
+  host: localhost
+  port: 5432
+  dbname: model
+  user: mosaic_caiso_etl
+  password: such_secret_much_secure
