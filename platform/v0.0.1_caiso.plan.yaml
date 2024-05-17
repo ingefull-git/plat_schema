@@ -15,6 +15,6 @@ metadata:
   deployed: null
 - source: caiso/v0.0.1/add_column_created_on
   author: some_name@mail.com
-  date: 2024-05-15
+  date: 2024-05-16
   description: Add created_on column
   deployed: null
