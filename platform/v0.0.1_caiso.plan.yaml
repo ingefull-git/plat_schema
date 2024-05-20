@@ -2,19 +2,20 @@ version: v0.0.1
 kind: plan
 schema: platform
 env: caiso
-metadata:
-- source: base/v0.0.1/add_market_tables
-  author: some_name@mail.com
-  date: 2024-05-15
-  description: Add initial market tables
-  deployed: null
-- source: base/v0.0.1/add_reference_tables
-  author: some_name@mail.com
-  date: 2024-05-15
-  description: Add_reference_tables
-  deployed: null
-- source: caiso/v0.0.1/add_column_created_on
-  author: some_name@mail.com
-  date: 2024-05-16
-  description: Add created_on column
-  deployed: null
+steps:
+  - source: base/v0.0.1/add_market_tables
+    author: some_name@mail.com
+    date: 2024-05-15
+    description: Add initial market tables
+    deployed: null
+  - source: base/v0.0.1/add_reference_tables
+    author: some_name@mail.com
+    date: 2024-05-15
+    description: Add_reference_tables
+    deployed: null
+  - source: caiso/v0.0.1/add_column_created_on
+    author: some_name@mail.com
+    date: 2024-05-16
+    description: Add created_on column
+    deployed: null
+
