@@ -69,7 +69,7 @@ class Deployment:
             self.logger.info("Database connection closed")
 
     def _connect_db(self):
-        self.logger.info("Connecting to the database")
+        self.logger.info(f"Connecting to the database: {self.config}")
         try:
             return psycopg2.connect(
                 host=self.config.db_host,
