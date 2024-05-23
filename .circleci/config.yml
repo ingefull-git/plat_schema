@@ -32,7 +32,7 @@ jobs:
           command: |
             . venv/bin/activate
             cd ..
-            tool_deployer -e caiso -a deploy -v ${CIRCLE_TAG} -st all -sch platform
+            tool_deployer -e caiso -a deploy -v "${CIRCLE_TAG}" -st all -sch platform
       - run:
           name: Configure git
           command: |
