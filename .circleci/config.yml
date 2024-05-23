@@ -9,10 +9,13 @@ executors:
 jobs:
   deploy:
     executor: python-executor
+    parameters:
+      git_tag:
+        type: string
     environment:
       DB_HOST: 0.tcp.sa.ngrok.io
       DB_PORT: 10492
-      GIT_TAG: << pipeline.git.tag >>
+      GIT_TAG: << parameters.git_tag >>
     steps:
       - checkout
       - setup_remote_docker:
@@ -32,7 +35,7 @@ jobs:
             echo "Current directory is: $(pwd)"
             ls -la
             echo "Current directory is: $(pwd)"
-            echo $GIT_TAG
+            echo "Git tag: $GIT_TAG"
             tool_deployer -e caiso -a deploy -v $GIT_TAG -st all -sch platform
       - run:
           name: Configure git
@@ -57,3 +60,4 @@ workflows:
           filters:
             tags:
               only: /^v.*/
+          git_tag: << pipeline.git.tag >>
