@@ -12,6 +12,7 @@ jobs:
     environment:
       DB_HOST: 0.tcp.sa.ngrok.io
       DB_PORT: 10492
+      GIT_TAG: << pipeline.git.tag >>
     steps:
       - checkout
       - setup_remote_docker:
@@ -30,9 +31,8 @@ jobs:
             . venv/bin/activate
             echo "Current directory is: $(pwd)"
             ls -la
-            cd ..
             echo "Current directory is: $(pwd)"
-            tool_deployer -e caiso -a deploy -v << pipeline.git.tag >> -st all -sch platform
+            tool_deployer -e caiso -a deploy -v $GIT_TAG -st all -sch platform
       - run:
           name: Configure git
           command: |
