@@ -16,7 +16,9 @@
 *.gif
 *.svg
 *.ipynb
-
+.env
+venv/
+env/
 
 
 !.gitignore
