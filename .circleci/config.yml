@@ -9,9 +9,6 @@ executors:
 jobs:
   deploy:
     executor: python-executor
-    parameters:
-      git_tag:
-        type: string
     environment:
       DB_HOST: 0.tcp.sa.ngrok.io
       DB_PORT: 10492
