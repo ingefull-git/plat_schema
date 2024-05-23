@@ -1,51 +1,58 @@
 version: 2.1
 
+executors:
+  python-executor:
+    docker:
+      - image: circleci/python:3.8  # Use the appropriate Python version
+    working_directory: ~/repo
+
 jobs:
   deploy:
-    docker:
-      - image: circleci/python:3.8
+    executor: python-executor
     environment:
-      DB_HOST: your_db_host
-      DB_PORT: your_db_port
-      DB_NAME: your_db_name
-      DB_USER: your_db_user
-      DB_PASSWORD: your_db_password
+      DB_HOST: << pipeline.parameters.DB_HOST >>
+      DB_PORT: << pipeline.parameters.DB_PORT >>
+      DB_NAME: << pipeline.parameters.DB_NAME >>
+      DB_USER: << pipeline.parameters.DB_USER >>
+      DB_PASSWORD: << pipeline.parameters.DB_PASSWORD >>
     steps:
       - checkout
+      - setup_remote_docker:
+          version: 20.10.7
       - run:
-          name: Set up Python environment
+          name: Install dependencies
           command: |
             python -m venv venv
             . venv/bin/activate
-            pip install -r requirements.txt
+            pip install --upgrade pip
+            cd tool_deployer
+            pip install -e .
       - run:
-          name: Detect changed plan files
-          id: detect-changed-files
-          command: |
-            git fetch origin main
-            changed_files=$(git diff --name-only origin/main...HEAD | grep -E '\.plan\.yaml$' || true)
-            echo "Changed plan files:"
-            echo "$changed_files"
-            echo "$changed_files" > changed_files.txt
-      - run:
-          name: Deploy updated plans
+          name: Deploy schemas
           command: |
             . venv/bin/activate
-            if [ -s changed_files.txt ]; then
-              while IFS= read -r file; do
-                if [ -n "$file" ]; then
-                  echo "Deploying plan: $file"
-                  env=$(echo $file | cut -d'_' -f2 | cut -d'.' -f1)
-                  version=$(echo $file | cut -d'_' -f1)
-                  python deployer.py -e $env -a deploy -v $version -st all -sch platform
-                fi
-              done < changed_files.txt
-            else
-              echo "No .plan.yaml files changed. Skipping deployment."
-            fi
+            cd ..
+            tool_deployer -e caiso -a deploy -v $(git describe --tags) -st all -sch platform
+      - run:
+          name: Configure git
+          command: |
+            git config --global user.email "circleci@yourdomain.com"
+            git config --global user.name "CircleCI"
+      - run:
+          name: Commit changes
+          command: |
+            git add .
+            git commit -m "Updated plan files with deployment timestamp"
+      - run:
+          name: Push changes
+          command: |
+            git push origin $(git rev-parse --abbrev-ref HEAD)
 
 workflows:
   version: 2
-  deploy:
+  deploy_on_tag:
     jobs:
-      - deploy
+      - deploy:
+          filters:
+            tags:
+              only: /^v.*/
