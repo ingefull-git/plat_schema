@@ -59,4 +59,4 @@ workflows:
           filters:
             tags:
               only: /^v.*/
-          git_tag: ${CIRCLE_TAG}
+          git_tag: v0.1.1
