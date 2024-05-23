@@ -29,6 +29,7 @@ jobs:
           command: |
             . venv/bin/activate
             echo "Current directory is: $(pwd)"
+            ls -la
             cd ..
             echo "Current directory is: $(pwd)"
             tool_deployer -e caiso -a deploy -v << pipeline.git.tag >> -st all -sch platform
