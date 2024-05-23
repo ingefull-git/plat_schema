@@ -9,6 +9,9 @@ executors:
 jobs:
   deploy:
     executor: python-executor
+    parameters:
+      git_tag:
+        type: string
     environment:
       DB_HOST: 0.tcp.sa.ngrok.io
       DB_PORT: 10492
@@ -31,8 +34,8 @@ jobs:
             echo "Current directory is: $(pwd)"
             ls -la
             echo "Current directory is: $(pwd)"
-            echo "Git tag: ${CIRCLE_TAG}"
-            tool_deployer -e caiso -a deploy -v ${CIRCLE_TAG} -st all -sch platform
+            echo "Git tag: << parameters.git_tag >>"
+            tool_deployer -e caiso -a deploy -v "<< parameters.git_tag >>" -st all -sch platform
       - run:
           name: Configure git
           command: |
@@ -56,3 +59,4 @@ workflows:
           filters:
             tags:
               only: /^v.*/
+          git_tag: << pipeline.git.tag >>
