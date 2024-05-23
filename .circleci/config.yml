@@ -29,6 +29,7 @@ jobs:
           command: |
             . venv/bin/activate
             cd ..
+            echo "Current directory is: $(pwd)"
             tool_deployer -e caiso -a deploy -v "${CIRCLE_TAG}" -st all -sch platform
       - run:
           name: Configure git
