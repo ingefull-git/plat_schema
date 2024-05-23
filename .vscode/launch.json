@@ -87,7 +87,7 @@
                 "--action",
                 "deploy",
                 "--version",
-                "v0.0.1",
+                "v0.1.1",
                 "--steps",
                 "all",
                 "--schema",
