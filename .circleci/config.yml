@@ -10,7 +10,7 @@ jobs:
   deploy:
     executor: python-executor
     environment:
-      DB_HOST: tcp://0.tcp.sa.ngrok.io
+      DB_HOST: 0.tcp.sa.ngrok.io
       DB_PORT: 10492
     steps:
       - checkout
