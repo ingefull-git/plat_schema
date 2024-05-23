@@ -32,6 +32,7 @@ jobs:
             echo "Current directory is: $(pwd)"
             ls -la
             echo "Current directory is: $(pwd)"
+            echo $GIT_TAG
             tool_deployer -e caiso -a deploy -v $GIT_TAG -st all -sch platform
       - run:
           name: Configure git
