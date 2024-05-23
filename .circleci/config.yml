@@ -36,11 +36,11 @@ jobs:
             echo "Current directory is: $(pwd)"
             echo "Git tag: << parameters.git_tag >>"
             tool_deployer -e caiso -a deploy -v "<< parameters.git_tag >>" -st all -sch platform
-      - run:
-          name: Configure git
-          command: |
-            git config --global user.email "circleci@yourdomain.com"
-            git config --global user.name "CircleCI"
+      # - run:
+      #     name: Configure git
+      #     command: |
+      #       git config --global user.email "circleci@yourdomain.com"
+      #       git config --global user.name "CircleCI"
       - run:
           name: Commit changes
           command: |
