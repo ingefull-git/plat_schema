@@ -1,0 +1,16 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tool_deployer"
+version = "0.0.1"
+description = "A database deployment tool"
+authors = [{ name = "rulo", email = "rulo@mail.com" }]
+dependencies = ["psycopg2-binary", "pyyaml"]
+
+[tool.hatch.envs.default]
+dependencies = ["pytest", "black", "isort"]
+
+[project.scripts]
+tool_deployer = "tool_deployer.cli:main"
