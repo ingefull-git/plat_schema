@@ -1,0 +1,20 @@
+.*
+
+*.pyc
+*.csv
+# *.yaml
+# *.json
+*.txt
+*.zip
+*.parquet
+*.pdf
+# *.sh
+*.html
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.ipynb
+
+!.gitignore
