@@ -15,7 +15,6 @@ jobs:
     environment:
       DB_HOST: 0.tcp.sa.ngrok.io
       DB_PORT: 10492
-      GIT_TAG: << parameters.git_tag >>
     steps:
       - checkout
       - setup_remote_docker:
