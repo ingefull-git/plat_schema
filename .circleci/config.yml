@@ -36,11 +36,6 @@ jobs:
           command: |
             . venv/bin/activate
             tool_deployer -e caiso -a deploy -v "<< parameters.version >>" -st all -sch << parameters.schema >>
-
-  commit_and_push:
-    executor: python-executor
-    steps:
-      - checkout
       - run:
           name: Configure git
           command: |
@@ -72,9 +67,9 @@ workflows:
               only: /^v.*/
           version: v0.1.1
           schema: platform
-      - commit_and_push:
-          requires:
-            - deploy
-          filters:
-            tags:
-              only: /^v.*/
+      # - commit_and_push:
+      #     requires:
+      #       - deploy
+      #     filters:
+      #       tags:
+      #         only: /^v.*/
