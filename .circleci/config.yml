@@ -23,6 +23,9 @@ jobs:
       - checkout
       - setup_remote_docker:
           version: 20.10.7
+      - add_ssh_keys:
+          fingerprints:
+            - "mpwb+fo8b0vSe3cC4/2yEp1GBc6908FGNp/XYj6rJMA"
       - run:
           name: Install dependencies
           command: |
@@ -41,11 +44,15 @@ jobs:
           command: |
             GIT_USER_NAME=$(git config --get user.name || echo "CircleCI")
             GIT_USER_EMAIL=$(git config --get user.email || echo "circleci@yourdomain.com")
+            echo "Name: $GIT_USER_NAME"
+            echo "Mail: $GIT_USER_EMAIL"
             git config --global user.name "$GIT_USER_NAME"
             git config --global user.email "$GIT_USER_EMAIL"
       - run:
           name: Commit changes
           command: |
+            echo "Git status:"
+            git status
             git add .
             git commit -m "Updated plan files with deployment timestamp"
       - run:
