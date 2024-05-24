@@ -52,8 +52,8 @@ jobs:
           name: Commit changes
           command: |
             echo "Git status:"
-            git status
             git add .
+            git status
             git commit -m "Updated plan files with deployment timestamp"
       - run:
           name: Debug and Push changes
