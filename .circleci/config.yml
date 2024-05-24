@@ -10,8 +10,12 @@ jobs:
   deploy:
     executor: python-executor
     parameters:
-      git_tag:
+      version:
         type: string
+        default: ""
+      schema:
+        type: string
+        default: ""
     environment:
       DB_HOST: 0.tcp.sa.ngrok.io
       DB_PORT: 10492
@@ -31,24 +35,31 @@ jobs:
           name: Deploy schemas
           command: |
             . venv/bin/activate
-            echo "Current directory is: $(pwd)"
-            ls -la
-            echo "Current directory is: $(pwd)"
-            echo "Git tag: << parameters.git_tag >>"
-            tool_deployer -e caiso -a deploy -v "<< parameters.git_tag >>" -st all -sch platform
+            tool_deployer -e caiso -a deploy -v "<< parameters.version >>" -st all -sch << parameters.schema >>
+
+  commit_and_push:
+    executor: python-executor
+    steps:
+      - checkout
       - run:
           name: Configure git
           command: |
-            git config --global user.email "rsosa.ingefull@gmail.com"
-            git config --global user.name "rulo_ingefull"
+            GIT_USER_NAME=$(git config --get user.name || echo "CircleCI")
+            GIT_USER_EMAIL=$(git config --get user.email || echo "circleci@yourdomain.com")
+            git config --global user.name "$GIT_USER_NAME"
+            git config --global user.email "$GIT_USER_EMAIL"
       - run:
           name: Commit changes
           command: |
             git add .
             git commit -m "Updated plan files with deployment timestamp"
       - run:
-          name: Push changes
+          name: Debug and Push changes
           command: |
+            echo "Current branch: $(git rev-parse --abbrev-ref HEAD)"
+            echo "Git status:"
+            git status
+            echo "Pushing changes..."
             git push origin $(git rev-parse --abbrev-ref HEAD)
 
 workflows:
@@ -59,4 +70,11 @@ workflows:
           filters:
             tags:
               only: /^v.*/
-          git_tag: v0.1.1
+          version: v0.1.1
+          schema: platform
+      - commit_and_push:
+          requires:
+            - deploy
+          filters:
+            tags:
+              only: /^v.*/
