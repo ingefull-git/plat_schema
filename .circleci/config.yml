@@ -13,9 +13,9 @@ jobs:
       schema:
         type: string
         default: ""
-    environment:
-      DB_HOST: 0.tcp.sa.ngrok.io
-      DB_PORT: 16687
+    # environment:
+    #   DB_HOST: 0.tcp.sa.ngrok.io
+    #   DB_PORT: 16687
     steps:
       - checkout
       - run:
@@ -36,9 +36,9 @@ jobs:
       schema:
         type: string
         default: ""
-    environment:
-      DB_HOST: 0.tcp.sa.ngrok.io
-      DB_PORT: 16687
+    # environment:
+    #   DB_HOST: 0.tcp.sa.ngrok.io
+    #   DB_PORT: 16687
     steps:
       - checkout
       - run:
@@ -55,9 +55,9 @@ jobs:
       schema:
         type: string
         default: ""
-    environment:
-      DB_HOST: 0.tcp.sa.ngrok.io
-      DB_PORT: 16687
+    # environment:
+    #   DB_HOST: 0.tcp.sa.ngrok.io
+    #   DB_PORT: 16687
     steps:
       - checkout
       - setup_remote_docker:
@@ -90,7 +90,7 @@ jobs:
       - run:
           name: Take Post-deployment Snapshot
           command: |
-            ./snapshot_schema.sh platform backups/platform/previous_snapshot.sql
+            ./snapshot_schema.sh << parameters.schema >> backups/<< parameters.schema >>/snapshot.sql
       - run:
           name: Commit changes
           command: |
