@@ -95,10 +95,12 @@ workflows:
   version: 2
   deploy_on_tag:
     jobs:
-      - take_snapshot
+      - take_snapshot:
+          schema: platform
       - compare_schemas:
           requires:
             - take_snapshot
+          schema: platform
       - deploy:
           requires:
             - compare_schemas
