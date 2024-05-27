@@ -13,7 +13,7 @@ export PGPASSWORD=$DB_PASSWORD
 
 
 # Check if the schema exists
-SCHEMA_EXISTS=$(psql -h $DB_HOST -U $DB_USER -d $DB_NAME -p $DB_PORT -tc "SELECT 1 FROM information_schema.schemata WHERE schema_name = '$SCHEMA_NAME';")
+SCHEMA_EXISTS=$(psql -h $DB_HOST -U $DB_USER -d $DB_NAME -p $DB_PORT -tc "SELECT 1 FROM information_schema.schemata WHERE schema_name = '$SCHEMA_NAME';" | tr -d '[:space:]')
 
 if [ "$SCHEMA_EXISTS" != "1" ]; then
   echo "Schema $SCHEMA_NAME does not exist"
