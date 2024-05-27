@@ -13,6 +13,9 @@ jobs:
       schema:
         type: string
         default: ""
+    environment:
+      DB_HOST: 0.tcp.sa.ngrok.io
+      DB_PORT: 16687
     steps:
       - checkout
       - run:
@@ -23,6 +26,8 @@ jobs:
       - run:
           name: Take Pre-deployment Snapshot
           command: |
+            echo "user: $DB_USER"
+            echo "passw: $DB_PASSWORD"
             ./snapshot_schema.sh "<< parameters.schema >>" snapshot.sql
 
   compare_schemas:
@@ -31,6 +36,9 @@ jobs:
       schema:
         type: string
         default: ""
+    environment:
+      DB_HOST: 0.tcp.sa.ngrok.io
+      DB_PORT: 16687
     steps:
       - checkout
       - run:
