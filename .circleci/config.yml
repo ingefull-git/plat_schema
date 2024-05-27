@@ -113,10 +113,12 @@ workflows:
     jobs:
       - take_snapshot:
           schema: platform
+          context: cicd
       - compare_schemas:
           requires:
             - take_snapshot
           schema: platform
+          context: cicd
       - deploy:
           requires:
             - compare_schemas
@@ -125,6 +127,7 @@ workflows:
               only: /^v.*/
           version: v0.1.1
           schema: platform
+          context: cicd
       # - commit_and_push:
       #     requires:
       #       - deploy
