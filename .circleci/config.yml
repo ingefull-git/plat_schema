@@ -128,7 +128,7 @@ workflows:
       #     context: cicd
       - deploy:
           requires:
-            - compare_schemas
+            - take_snapshot
           filters:
             tags:
               only: /^v.*/
