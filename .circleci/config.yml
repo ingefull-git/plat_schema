@@ -95,7 +95,13 @@ workflows:
   version: 2
   deploy_on_tag:
     jobs:
+      - take_snapshot:
+      - compare_schemas:
+          requires:
+            - take_snapshot
       - deploy:
+          requires:
+            - compare_schemas
           filters:
             tags:
               only: /^v.*/
