@@ -11,6 +11,13 @@ fi
 
 export PGPASSWORD=$DB_PASSWORD
 
+sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt bullseye-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+sudo apt-get update
+
+sudo apt-get install -y postgresql-client-16
+echo "PSQL version:"
+psql --version
 
 # Check if the schema exists
 SCHEMA_EXISTS=$(psql -h $DB_HOST -U $DB_USER -d $DB_NAME -p $DB_PORT -tc "SELECT 1 FROM information_schema.schemata WHERE schema_name = '$SCHEMA_NAME';" | tr -d '[:space:]')

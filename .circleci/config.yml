@@ -18,18 +18,18 @@ jobs:
     #   DB_PORT: 16687
     steps:
       - checkout
-      - run:
-          name: Add PostgreSQL Apt Repository
-          command: |
-            sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt bullseye-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
-            wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-            sudo apt-get update
-      - run:
-          name: Install PostgreSQL 16 Client
-          command: |
-            sudo apt-get install -y postgresql-client-16
-            echo "PSQL version:"
-            psql --version
+      # - run:
+      #     name: Add PostgreSQL Apt Repository
+      #     command: |
+      #       sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt bullseye-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+      #       wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+      #       sudo apt-get update
+      # - run:
+      #     name: Install PostgreSQL 16 Client
+      #     command: |
+      #       sudo apt-get install -y postgresql-client-16
+      #       echo "PSQL version:"
+      #       psql --version
       - run:
           name: Take Pre-deployment Snapshot
           command: |
