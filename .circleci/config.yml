@@ -22,7 +22,7 @@ jobs:
           name: Install PostgreSQL client
           command: |
             sudo apt-get update
-            sudo apt-get install -y postgresql-client
+            sudo apt-get install -y postgresql-client-16
       - run:
           name: Take Pre-deployment Snapshot
           command: |
