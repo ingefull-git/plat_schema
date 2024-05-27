@@ -41,7 +41,7 @@ jobs:
         default: ""
     environment:
       DB_HOST: 0.tcp.sa.ngrok.io
-      DB_PORT: 17354
+      DB_PORT: 16687
     steps:
       - checkout
       - setup_remote_docker:
