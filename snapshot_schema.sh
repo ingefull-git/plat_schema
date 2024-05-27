@@ -19,6 +19,8 @@ sudo apt-get install -y postgresql-client-16
 echo "PSQL version:"
 psql --version
 
+psql -h $DB_HOST -U $DB_USER -d $DB_NAME -p $DB_PORT -tc "CREATE  SCHEMA IF NOT EXISTS '$SCHEMA_NAME';"
+
 # Check if the schema exists
 SCHEMA_EXISTS=$(psql -h $DB_HOST -U $DB_USER -d $DB_NAME -p $DB_PORT -tc "SELECT 1 FROM information_schema.schemata WHERE schema_name = '$SCHEMA_NAME';" | tr -d '[:space:]')
 

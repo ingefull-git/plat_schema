@@ -104,7 +104,7 @@ jobs:
             echo "Git status:"
             git add .
             git status
-            git commit -m "Updated plan files with deployment timestamp"
+            git commit -m "Updated plan files and schema snapshot [ci skip]"
       - run:
           name: Debug and Push changes
           command: |
