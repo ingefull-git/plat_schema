@@ -9,6 +9,10 @@ executors:
 jobs:
   take_snapshot:
     executor: python-executor
+    parameters:
+      schema:
+        type: string
+        default: ""
     steps:
       - checkout
       - run:
@@ -23,6 +27,10 @@ jobs:
 
   compare_schemas:
     executor: python-executor
+    parameters:
+      schema:
+        type: string
+        default: ""
     steps:
       - checkout
       - run:
