@@ -7,6 +7,29 @@ executors:
     working_directory: ~/repo
 
 jobs:
+  take_snapshot:
+    executor: python-executor
+    steps:
+      - checkout
+      - run:
+          name: Install PostgreSQL client
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y postgresql-client
+      - run:
+          name: Take Pre-deployment Snapshot
+          command: |
+            ./snapshot_schema.sh "<< parameters.schema >>" snapshot.sql
+
+  compare_schemas:
+    executor: python-executor
+    steps:
+      - checkout
+      - run:
+          name: Compare Schemas
+          command: |
+            ./compare_schemas.sh snapshot.sql backup/"<< parameters.schema >>"/snapshot.sql
+
   deploy:
     executor: python-executor
     parameters:
@@ -39,15 +62,19 @@ jobs:
           command: |
             . venv/bin/activate
             tool_deployer -e caiso -a deploy -v "<< parameters.version >>" -st all -sch << parameters.schema >>
+      # - run:
+      #     name: Configure git
+      #     command: |
+      #       GIT_USER_NAME=$(git config --get user.name || echo "rulo_ingefull")
+      #       GIT_USER_EMAIL=$(git config --get user.email || echo "rsosa.ingefull@gmail.com")
+      #       echo "Name: $GIT_USER_NAME"
+      #       echo "Mail: $GIT_USER_EMAIL"
+      #       git config --global user.name "$GIT_USER_NAME"
+      #       git config --global user.email "$GIT_USER_EMAIL"
       - run:
-          name: Configure git
+          name: Take Post-deployment Snapshot
           command: |
-            GIT_USER_NAME=$(git config --get user.name || echo "rulo_ingefull")
-            GIT_USER_EMAIL=$(git config --get user.email || echo "rsosa.ingefull@gmail.com")
-            echo "Name: $GIT_USER_NAME"
-            echo "Mail: $GIT_USER_EMAIL"
-            git config --global user.name "$GIT_USER_NAME"
-            git config --global user.email "$GIT_USER_EMAIL"
+            ./snapshot_schema.sh platform backups/platform/previous_snapshot.sql
       - run:
           name: Commit changes
           command: |
