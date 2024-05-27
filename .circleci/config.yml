@@ -36,23 +36,23 @@ jobs:
             echo "user: $DB_USER"
             echo "passw: $DB_PASSWORD"
             ./snapshot_schema.sh "<< parameters.schema >>" snapshot.sql
-
-  compare_schemas:
-    executor: python-executor
-    parameters:
-      schema:
-        type: string
-        default: ""
-    # environment:
-    #   DB_HOST: 0.tcp.sa.ngrok.io
-    #   DB_PORT: 16687
-    steps:
-      - checkout
       - run:
           name: Compare Schemas
           command: |
             ./compare_schema.sh snapshot.sql backup/"<< parameters.schema >>"/snapshot.sql
 
+  # compare_schemas:
+  #   executor: python-executor
+  #   parameters:
+  #     schema:
+  #       type: string
+  #       default: ""
+  #   # environment:
+  #   #   DB_HOST: 0.tcp.sa.ngrok.io
+  #   #   DB_PORT: 16687
+  #   steps:
+  #     - checkout
+      
   deploy:
     executor: python-executor
     parameters:
@@ -121,11 +121,11 @@ workflows:
       - take_snapshot:
           schema: platform
           context: cicd
-      - compare_schemas:
-          requires:
-            - take_snapshot
-          schema: platform
-          context: cicd
+      # - compare_schemas:
+      #     requires:
+      #       - take_snapshot
+      #     schema: platform
+      #     context: cicd
       - deploy:
           requires:
             - compare_schemas
