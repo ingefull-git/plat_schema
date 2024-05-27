@@ -97,7 +97,7 @@ jobs:
       - run:
           name: Take Post-deployment Snapshot
           command: |
-            ./snapshot_schema.sh << parameters.schema >> backups/<< parameters.schema >>/snapshot.sql
+            ./snapshot_schema.sh << parameters.schema >> backup/<< parameters.schema >>/snapshot.sql
       - run:
           name: Commit changes
           command: |
