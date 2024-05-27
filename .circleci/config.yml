@@ -51,7 +51,7 @@ jobs:
       - run:
           name: Compare Schemas
           command: |
-            ./compare_schemas.sh snapshot.sql backup/"<< parameters.schema >>"/snapshot.sql
+            ./compare_schema.sh snapshot.sql backup/"<< parameters.schema >>"/snapshot.sql
 
   deploy:
     executor: python-executor
