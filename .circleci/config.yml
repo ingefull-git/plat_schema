@@ -1,51 +1,143 @@
 version: 2.1
 
-jobs:
-  deploy:
+executors:
+  python-executor:
     docker:
-      - image: circleci/python:3.8
-    environment:
-      DB_HOST: your_db_host
-      DB_PORT: your_db_port
-      DB_NAME: your_db_name
-      DB_USER: your_db_user
-      DB_PASSWORD: your_db_password
+      - image: circleci/python:3.8  # Use the appropriate Python version
+    working_directory: ~/repo
+
+jobs:
+  take_snapshot:
+    executor: python-executor
+    parameters:
+      schema:
+        type: string
+        default: ""
+    # environment:
+    #   DB_HOST: 0.tcp.sa.ngrok.io
+    #   DB_PORT: 16687
     steps:
       - checkout
+      # - run:
+      #     name: Add PostgreSQL Apt Repository
+      #     command: |
+      #       sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt bullseye-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+      #       wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+      #       sudo apt-get update
+      # - run:
+      #     name: Install PostgreSQL 16 Client
+      #     command: |
+      #       sudo apt-get install -y postgresql-client-16
+      #       echo "PSQL version:"
+      #       psql --version
       - run:
-          name: Set up Python environment
+          name: Take Pre-deployment Snapshot
+          command: |
+            echo "user: $DB_USER"
+            echo "passw: $DB_PASSWORD"
+            ./snapshot_schema.sh "<< parameters.schema >>" snapshot.sql
+      - run:
+          name: Compare Schemas
+          command: |
+            ./compare_schema.sh snapshot.sql backup/"<< parameters.schema >>"/snapshot.sql
+
+  # compare_schemas:
+  #   executor: python-executor
+  #   parameters:
+  #     schema:
+  #       type: string
+  #       default: ""
+  #   # environment:
+  #   #   DB_HOST: 0.tcp.sa.ngrok.io
+  #   #   DB_PORT: 16687
+  #   steps:
+  #     - checkout
+      
+  deploy:
+    executor: python-executor
+    parameters:
+      version:
+        type: string
+        default: ""
+      schema:
+        type: string
+        default: ""
+    # environment:
+    #   DB_HOST: 0.tcp.sa.ngrok.io
+    #   DB_PORT: 16687
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 20.10.7
+      - add_ssh_keys:
+          fingerprints:
+            - "mpwb+fo8b0vSe3cC4/2yEp1GBc6908FGNp/XYj6rJMA"
+      - run:
+          name: Install dependencies
           command: |
             python -m venv venv
             . venv/bin/activate
-            pip install -r requirements.txt
+            pip install --upgrade pip
+            cd tool_deployer
+            pip install -e .
       - run:
-          name: Detect changed plan files
-          id: detect-changed-files
-          command: |
-            git fetch origin main
-            changed_files=$(git diff --name-only origin/main...HEAD | grep -E '\.plan\.yaml$' || true)
-            echo "Changed plan files:"
-            echo "$changed_files"
-            echo "$changed_files" > changed_files.txt
-      - run:
-          name: Deploy updated plans
+          name: Deploy schemas
           command: |
             . venv/bin/activate
-            if [ -s changed_files.txt ]; then
-              while IFS= read -r file; do
-                if [ -n "$file" ]; then
-                  echo "Deploying plan: $file"
-                  env=$(echo $file | cut -d'_' -f2 | cut -d'.' -f1)
-                  version=$(echo $file | cut -d'_' -f1)
-                  python deployer.py -e $env -a deploy -v $version -st all -sch platform
-                fi
-              done < changed_files.txt
-            else
-              echo "No .plan.yaml files changed. Skipping deployment."
-            fi
+            tool_deployer -e caiso -a deploy -v "<< parameters.version >>" -st all -sch << parameters.schema >>
+      - run:
+          name: Configure git
+          command: |
+            GIT_USER_NAME=$(git config --get user.name || echo "rulo_ingefull")
+            GIT_USER_EMAIL=$(git config --get user.email || echo "rsosa.ingefull@gmail.com")
+            echo "Name: $GIT_USER_NAME"
+            echo "Mail: $GIT_USER_EMAIL"
+            git config --global user.name "$GIT_USER_NAME"
+            git config --global user.email "$GIT_USER_EMAIL"
+      - run:
+          name: Take Post-deployment Snapshot
+          command: |
+            ./snapshot_schema.sh << parameters.schema >> backup/<< parameters.schema >>/snapshot.sql
+      - run:
+          name: Commit changes
+          command: |
+            echo "Git status:"
+            git add .
+            git status
+            git commit -m "Updated plan files and schema snapshot [ci skip]"
+      - run:
+          name: Debug and Push changes
+          command: |
+            echo "Current branch: $(git rev-parse --abbrev-ref HEAD)"
+            echo "Git status:"
+            git status
+            echo "Pushing changes..."
+            git push origin $(git rev-parse --abbrev-ref HEAD)
 
 workflows:
   version: 2
-  deploy:
+  deploy_on_tag:
     jobs:
-      - deploy
+      - take_snapshot:
+          schema: platform
+          context: cicd
+      # - compare_schemas:
+      #     requires:
+      #       - take_snapshot
+      #     schema: platform
+      #     context: cicd
+      - deploy:
+          requires:
+            - take_snapshot
+          filters:
+            tags:
+              only: /^v.*/
+          version: v0.1.2
+          schema: platform
+          context: cicd
+      # - commit_and_push:
+      #     requires:
+      #       - deploy
+      #     filters:
+      #       tags:
+      #         only: /^v.*/

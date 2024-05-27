@@ -1,0 +1,25 @@
+.*
+
+*.pyc
+*.csv
+# *.yaml
+# *.json
+*.txt
+*.zip
+*.parquet
+*.pdf
+# *.sh
+*.html
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.ipynb
+.env
+venv/
+env/
+
+
+!.gitignore
+!.circleci

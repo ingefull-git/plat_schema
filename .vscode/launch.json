@@ -75,6 +75,35 @@
             ],
             "env": {},
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "name": "tool_deployer",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/tool_deployer/src/tool_deployer/cli.py",
+            "args": [
+                "--env",
+                "caiso",
+                "--action",
+                "deploy",
+                "--version",
+                "v0.1.1",
+                "--steps",
+                "all",
+                "--schema",
+                "platform",
+                "--log-level",
+                "DEBUG"
+            ],
+            "console": "integratedTerminal",
+            "env": {
+                "DB_HOST": "localhost",
+                "DB_PORT": "5432",
+                "DB_NAME": "model",
+                "DB_USER": "mosaic_caiso_etl",
+                "DB_PASSWORD": "such_secret_much_secure"
+            },
+            "justMyCode": true
         }
     ]
 }

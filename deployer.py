@@ -102,7 +102,7 @@ def main():
     args = parser.parse_args()
 
     config = load_config(cwd / args.schema / args.env)
-    plan_file = cwd / f"{args.version}_{args.env}.plan.yaml"
+    plan_file = cwd / args.schema / f"{args.version}_{args.env}.plan.yaml"
 
     db_config = config["database"]
     conn = psycopg2.connect(
@@ -117,7 +117,7 @@ def main():
         if args.action == "deploy":
             plan = read_plan(plan_file)
 
-            scripts = plan["metadata"]
+            scripts = plan["steps"]
             scripts_to_run = filter_scripts_by_steps(scripts, args.steps)
 
             for script in scripts_to_run:

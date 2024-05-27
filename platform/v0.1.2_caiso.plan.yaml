@@ -1,15 +1,15 @@
-version: v0.0.2
+version: v0.1.2
 kind: plan
 schema: platform
 env: caiso
-metadata:
-- source: base/v0.0.2/add_market_tables
+steps:
+- source: base/v0.1.2/add_market_tables
   author: some_name@mail.com
   date: 2024-05-15
   description: Add initial market tables
-  deployed: null
-- source: caiso/v0.0.2/add_column_is_admin
+  deployed: '2024-05-27T21:22:58.392560+00:00'
+- source: caiso/v0.1.2/add_column_is_admin
   author: some_name@mail.com
   date: 2024-05-15
   description: Add is_admin column
-  deployed: null
+  deployed: '2024-05-27T21:22:58.552364+00:00'
