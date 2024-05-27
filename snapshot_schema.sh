@@ -9,6 +9,9 @@ if [ -z "$DB_HOST" ] || [ -z "$DB_USER" ] || [ -z "$DB_NAME" ] || [ -z "$DB_PORT
   exit 1
 fi
 
+export PGPASSWORD=$DB_PASSWORD
+
+
 # Check if the schema exists
 SCHEMA_EXISTS=$(psql -h $DB_HOST -U $DB_USER -d $DB_NAME -p $DB_PORT -tc "SELECT 1 FROM information_schema.schemata WHERE schema_name = '$SCHEMA_NAME';")
 
