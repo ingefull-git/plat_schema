@@ -128,7 +128,7 @@ jobs:
           name: Commit schema changes
           command: |
             echo "Git status:"
-            git add .
+            git add << parameters.schema >> backup/<< parameters.schema >>
             git status
             git commit -m "Updated plan files and schema snapshot [ci skip]"
       # - run:
@@ -144,6 +144,7 @@ jobs:
           command: |
             ls
             rm -rf diffs
+            rm -rf snapshots/<< parameters.schema >>
             git commit -am "Clean up after deployment [ci skip]"
             git push origin $(git rev-parse --abbrev-ref HEAD)
 
