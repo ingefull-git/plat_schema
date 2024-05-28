@@ -26,17 +26,17 @@ jobs:
       - run:
           name: Take Snapshot
           command: |
-            mkdir -p snapshots
-            ./snapshot_schema.sh << parameters.schema >> snapshots/snapshot.sql
-            if [ -f snapshots/snapshot.sql ]; then
+            mkdir -p snapshots/<< parameters.schema >>
+            ./snapshot_schema.sh << parameters.schema >> snapshots/<< parameters.schema >>/snapshot.sql
+            if [ -f snapshots/<< parameters.schema >>/snapshot.sql ]; then
               echo "Snapshot taken successfully."
-              ls snapshots
+              ls snapshots/<< parameters.schema >>
             else
               echo "Snapshot failed."
               exit 1
             fi
       - persist_to_workspace:
-          root: snapshots
+          root: snapshots/<< parameters.schema >>
           paths:
             - snapshot.sql
 
@@ -56,11 +56,11 @@ jobs:
       - run:
           name: Compare Schemas
           command: |
-            mkdir -p diffs
+            mkdir -p diffs/<< parameters.schema >>
             echo "Current dir: $(pwd)"
-            ls
-            ls snapshots
-            if ./compare_schema.sh snapshots/snapshot.sql backup/<< parameters.schema >>/snapshot.sql diffs/<< parameters.schema >>/schema_diff.sql; then
+            ls diffs/<< parameters.schema >>
+            ls snapshots/<< parameters.schema >>
+            if ./compare_schema.sh snapshots/<< parameters.schema >>/snapshot.sql backup/<< parameters.schema >>/snapshot.sql diffs/<< parameters.schema >>/schema_diff.sql; then
               echo "No differences found. Continuing deployment."
               rm -rf snapshots
             else
