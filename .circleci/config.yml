@@ -63,6 +63,7 @@ jobs:
             if ./compare_schema.sh snapshots/<< parameters.schema >>/snapshot.sql backup/<< parameters.schema >>/snapshot.sql diffs/<< parameters.schema >>/schema_diff.sql; then
               echo "No differences found. Continuing deployment."
               rm -rf snapshots
+              rm -rf diffs
             else
               rm -rf snapshots
               ls
@@ -144,14 +145,14 @@ jobs:
       #       git status
       #       echo "Pushing changes..."
       #       git push origin $(git rev-parse --abbrev-ref HEAD)
-      - run:
-          name: Clean Repository
-          command: |
-            ls
-            rm -rf diffs
-            rm -rf snapshots/<< parameters.schema >>
-            git commit -am "Clean up after deployment [ci skip]"
-            git push origin $(git rev-parse --abbrev-ref HEAD)
+      # - run:
+      #     name: Clean Repository
+      #     command: |
+      #       ls
+      #       rm -rf diffs
+      #       rm -rf snapshots/<< parameters.schema >>
+      #       git commit -am "Clean up after deployment [ci skip]"
+      #       git push origin $(git rev-parse --abbrev-ref HEAD)
 
 workflows:
   version: 2

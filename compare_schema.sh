@@ -22,6 +22,6 @@ if diff "$NEW_SNAPSHOT" "$PREVIOUS_SNAPSHOT" > /dev/null; then
   exit 0
 else
   echo "Schemas are different, generating diff file."
-  diff "$NEW_SNAPSHOT" "$PREVIOUS_SNAPSHOT" > "$DIFF_OUTPUT"
+  diff -u "$PREVIOUS_SNAPSHOT" "$NEW_SNAPSHOT" > "$DIFF_OUTPUT"
   exit 1
 fi
