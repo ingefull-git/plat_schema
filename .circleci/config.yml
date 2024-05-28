@@ -65,9 +65,10 @@ jobs:
               rm -rf snapshots
             else
               rm -rf snapshots
+              ls
               echo "Differences found. Creating diff file and commit."
-              ls diffs
-              git add diffs/schema_diff.sql
+              ls diffs/<< parameters.schema >>
+              git add diffs/<< parameters.schema >>/schema_diff.sql
               git commit -m "Found schema differences [ci skip]"
               git push origin $(git rev-parse --abbrev-ref HEAD)
               exit 1
