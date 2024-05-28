@@ -14,6 +14,13 @@ parameters:
 jobs:
   take_snapshot:
     executor: python-executor
+    parameters:
+      version:
+        type: string
+        default: ""
+      schema:
+        type: string
+        default: ""
     steps:
       - checkout
       - run:
@@ -28,6 +35,13 @@ jobs:
 
   compare_schemas:
     executor: python-executor
+    parameters:
+      version:
+        type: string
+        default: ""
+      schema:
+        type: string
+        default: ""
     steps:
       - checkout
       - attach_workspace:
