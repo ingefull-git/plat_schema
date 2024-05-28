@@ -127,7 +127,7 @@ jobs:
       - run:
           name: Clean Repository
           command: |
-          ls
+            ls
             rm -f diffs/schema_diff.sql
             git commit -am "Clean up after deployment [ci skip]"
             git push origin $(git rev-parse --abbrev-ref HEAD)
