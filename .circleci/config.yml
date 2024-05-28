@@ -28,12 +28,17 @@ jobs:
           command: |
             mkdir -p snapshots
             ./snapshot_schema.sh << parameters.schema >> snapshots/snapshot.sql
-            ls
-            find snapshot.sql
+            if [ -f snapshots/snapshot.sql ]; then
+              echo "Snapshot taken successfully."
+              ls snapshots
+            else
+              echo "Snapshot failed."
+              exit 1
+            fi
       - persist_to_workspace:
-          root: .
+          root: snapshots
           paths:
-            - snapshots
+            - snapshot.sql
 
   compare_schemas:
     executor: python-executor
@@ -47,21 +52,21 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: .
+          at: ./snapshots
       - run:
           name: Compare Schemas
           command: |
             mkdir -p diffs
             echo "Current dir: $(pwd)"
             ls
-            find snapshot.sql
+            ls snapshots
             if ./compare_schema.sh snapshots/snapshot.sql backups/<< parameters.schema >>/snapshot.sql diffs/<< parameters.schema >>/schema_diff.sql; then
               echo "No differences found. Continuing deployment."
               rm -rf snapshots
             else
               rm -rf snapshots
               echo "Differences found. Creating diff file and commit."
-              find schema_diff.sql
+              ls diffs
               git add diffs/schema_diff.sql
               git commit -m "Found schema differences [ci skip]"
               git push origin $(git rev-parse --abbrev-ref HEAD)
