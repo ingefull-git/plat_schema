@@ -75,7 +75,7 @@ jobs:
               echo "Mail: $GIT_USER_EMAIL"
               git config --global user.name "$GIT_USER_NAME"
               git config --global user.email "$GIT_USER_EMAIL"
-              git add diffs/<< parameters.schema >>/schema_diff.sql
+              git add .
               git commit -m "Found schema differences [ci skip]"
               git push origin $(git rev-parse --abbrev-ref HEAD)
               exit 1
@@ -134,7 +134,7 @@ jobs:
           name: Commit schema changes
           command: |
             echo "Git status:"
-            git add << parameters.schema >> backup/<< parameters.schema >>
+            git add .
             git status
             git commit -m "Updated plan files and schema snapshot [ci skip]"
             git push origin $(git rev-parse --abbrev-ref HEAD)
