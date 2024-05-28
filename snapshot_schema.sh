@@ -33,11 +33,10 @@ fi
 pg_dump --schema-only --no-owner --no-acl -h $DB_HOST -U $DB_USER -d $DB_NAME -p $DB_PORT -n $SCHEMA_NAME > $OUTPUT_FILE
 
 
-echo "Current dir: $(pwd)"
-ls
-
 # Verify that the snapshot file was created
 if [ ! -f "$OUTPUT_FILE" ]; then
   echo "Snapshot file $OUTPUT_FILE was not created"
   exit 1
+else
+  echo "Snapshot created: $OUTPUT_FILE"
 fi

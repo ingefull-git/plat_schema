@@ -111,6 +111,7 @@ jobs:
           command: |
             . venv/bin/activate
             tool_deployer -e caiso -a deploy -v "<< parameters.version >>" -st all -sch << parameters.schema >>
+
       - run:
           name: Configure git
           command: |
@@ -120,6 +121,15 @@ jobs:
             echo "Mail: $GIT_USER_EMAIL"
             git config --global user.name "$GIT_USER_NAME"
             git config --global user.email "$GIT_USER_EMAIL"
+      - run:
+          name: Check for Errors in Logs
+          command: |
+            if grep -q 'ERROR' tool_deployer.log; then
+              echo "Deployment failed with errors."
+              exit 1
+            else
+              echo "Deployment succeeded."
+            fi
       - run:
           name: Take Post-deployment Snapshot
           command: |
