@@ -173,7 +173,7 @@ workflows:
           #     only: master
             tags:
               only: /^v.*/
-          version: v0.1.1
+          version: v0.1.2
           schema: platform
           context: cicd
       # - commit_and_push:
