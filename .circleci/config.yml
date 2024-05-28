@@ -162,11 +162,11 @@ workflows:
       - deploy:
           requires:
             - compare_schemas
-          filters:
-            branches:
-              only: master
-            # tags:
-            #   only: /^v.*/
+          # filters:
+          #   branches:
+          #     only: master
+            tags:
+              only: /^v.*/
           version: v0.1.2
           schema: platform
           context: cicd
