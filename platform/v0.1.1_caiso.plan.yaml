@@ -7,14 +7,14 @@ steps:
   author: some_name@mail.com
   date: 2024-05-15
   description: Add initial market tables
-  deployed: '2024-05-27T21:17:23.375556+00:00'
+  deployed: null
 - source: base/v0.1.1/add_reference_tables
   author: some_name@mail.com
   date: 2024-05-15
   description: Add_reference_tables
-  deployed: '2024-05-27T21:17:23.541335+00:00'
+  deployed: null
 - source: caiso/v0.1.1/add_column_created_on
   author: some_name@mail.com
   date: 2024-05-16
   description: Add created_on column
-  deployed: '2024-05-27T21:17:23.703451+00:00'
+  deployed: null

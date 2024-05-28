@@ -3,55 +3,48 @@ version: 2.1
 executors:
   python-executor:
     docker:
-      - image: circleci/python:3.8  # Use the appropriate Python version
+      - image: circleci/python:3.8
     working_directory: ~/repo
+
+parameters:
+  git_tag:
+    type: string
+    default: ""
 
 jobs:
   take_snapshot:
     executor: python-executor
-    parameters:
-      schema:
-        type: string
-        default: ""
-    # environment:
-    #   DB_HOST: 0.tcp.sa.ngrok.io
-    #   DB_PORT: 16687
     steps:
       - checkout
-      # - run:
-      #     name: Add PostgreSQL Apt Repository
-      #     command: |
-      #       sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt bullseye-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
-      #       wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-      #       sudo apt-get update
-      # - run:
-      #     name: Install PostgreSQL 16 Client
-      #     command: |
-      #       sudo apt-get install -y postgresql-client-16
-      #       echo "PSQL version:"
-      #       psql --version
       - run:
-          name: Take Pre-deployment Snapshot
+          name: Take Snapshot
           command: |
-            echo "user: $DB_USER"
-            echo "passw: $DB_PASSWORD"
-            ./snapshot_schema.sh "<< parameters.schema >>" snapshot.sql
+            mkdir -p snapshots
+            ./snapshot_schema.sh platform snapshots/current_snapshot.sql
+      - persist_to_workspace:
+          root: .
+          paths:
+            - snapshots
+
+  compare_schemas:
+    executor: python-executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
       - run:
           name: Compare Schemas
           command: |
-            ./compare_schema.sh snapshot.sql backup/"<< parameters.schema >>"/snapshot.sql
-
-  # compare_schemas:
-  #   executor: python-executor
-  #   parameters:
-  #     schema:
-  #       type: string
-  #       default: ""
-  #   # environment:
-  #   #   DB_HOST: 0.tcp.sa.ngrok.io
-  #   #   DB_PORT: 16687
-  #   steps:
-  #     - checkout
+            mkdir -p diffs
+            if ./compare_schemas.sh snapshots/current_snapshot.sql backups/platform/previous_snapshot.sql diffs/schema_diff.txt; then
+              echo "No differences found. Continuing deployment."
+            else
+              echo "Differences found. Creating diff file."
+              git add diffs/schema_diff.txt
+              git commit -m "Found schema differences [ci skip]"
+              git push origin $(git rev-parse --abbrev-ref HEAD)
+              exit 1
+            fi
       
   deploy:
     executor: python-executor
@@ -67,11 +60,13 @@ jobs:
     #   DB_PORT: 16687
     steps:
       - checkout
+      - attach_workspace:
+          at: .
       - setup_remote_docker:
           version: 20.10.7
-      - add_ssh_keys:
-          fingerprints:
-            - "mpwb+fo8b0vSe3cC4/2yEp1GBc6908FGNp/XYj6rJMA"
+      # - add_ssh_keys:
+      #     fingerprints:
+      #       - "mpwb+fo8b0vSe3cC4/2yEp1GBc6908FGNp/XYj6rJMA"
       - run:
           name: Install dependencies
           command: |
@@ -99,19 +94,25 @@ jobs:
           command: |
             ./snapshot_schema.sh << parameters.schema >> backup/<< parameters.schema >>/snapshot.sql
       - run:
-          name: Commit changes
+          name: Commit schema changes
           command: |
             echo "Git status:"
             git add .
             git status
             git commit -m "Updated plan files and schema snapshot [ci skip]"
+      # - run:
+      #     name: Debug and Push changes
+      #     command: |
+      #       echo "Current branch: $(git rev-parse --abbrev-ref HEAD)"
+      #       echo "Git status:"
+      #       git status
+      #       echo "Pushing changes..."
+      #       git push origin $(git rev-parse --abbrev-ref HEAD)
       - run:
-          name: Debug and Push changes
+          name: Clean Repository
           command: |
-            echo "Current branch: $(git rev-parse --abbrev-ref HEAD)"
-            echo "Git status:"
-            git status
-            echo "Pushing changes..."
+            rm -f diffs/schema_diff.txt
+            git commit -am "Clean up after deployment [ci skip]"
             git push origin $(git rev-parse --abbrev-ref HEAD)
 
 workflows:
@@ -121,17 +122,19 @@ workflows:
       - take_snapshot:
           schema: platform
           context: cicd
-      # - compare_schemas:
-      #     requires:
-      #       - take_snapshot
-      #     schema: platform
-      #     context: cicd
-      - deploy:
+      - compare_schemas:
           requires:
             - take_snapshot
+          schema: platform
+          context: cicd
+      - deploy:
+          requires:
+            - compare_schemas
           filters:
-            tags:
-              only: /^v.*/
+            branches:
+              only: master
+            # tags:
+            #   only: /^v.*/
           version: v0.1.2
           schema: platform
           context: cicd
