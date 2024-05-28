@@ -55,9 +55,6 @@ jobs:
       schema:
         type: string
         default: ""
-    # environment:
-    #   DB_HOST: 0.tcp.sa.ngrok.io
-    #   DB_PORT: 16687
     steps:
       - checkout
       - attach_workspace:
