@@ -36,9 +36,9 @@ jobs:
               exit 1
             fi
       - persist_to_workspace:
-          root: snapshots/<< parameters.schema >>
+          root: snapshots
           paths:
-            - snapshot.sql
+            - << parameters.schema >>/snapshot.sql
 
   compare_schemas:
     executor: python-executor
@@ -52,7 +52,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: .
+          at: ./snapshots
       - run:
           name: Compare Schemas
           command: |
