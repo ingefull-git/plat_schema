@@ -137,6 +137,7 @@ jobs:
             git add << parameters.schema >> backup/<< parameters.schema >>
             git status
             git commit -m "Updated plan files and schema snapshot [ci skip]"
+            git push origin $(git rev-parse --abbrev-ref HEAD)
       # - run:
       #     name: Debug and Push changes
       #     command: |
@@ -152,7 +153,7 @@ jobs:
       #       rm -rf diffs
       #       rm -rf snapshots/<< parameters.schema >>
       #       git commit -am "Clean up after deployment [ci skip]"
-      #       git push origin $(git rev-parse --abbrev-ref HEAD)
+      #       
 
 workflows:
   version: 2
