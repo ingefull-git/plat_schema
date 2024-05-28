@@ -28,6 +28,8 @@ jobs:
           command: |
             mkdir -p snapshots
             ./snapshot_schema.sh << parameters.schema >> snapshots/snapshot.sql
+            ls
+            find snapshot.sql
       - persist_to_workspace:
           root: .
           paths:
