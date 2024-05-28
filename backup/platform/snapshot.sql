@@ -21,3 +21,9 @@ SET row_security = off;
 --
 
 CREATE SCHEMA platform;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
