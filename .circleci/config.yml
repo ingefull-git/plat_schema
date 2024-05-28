@@ -143,7 +143,7 @@ jobs:
           name: Clean Repository
           command: |
             ls
-            rm -f diffs/schema_diff.sql
+            rm -rf diffs
             git commit -am "Clean up after deployment [ci skip]"
             git push origin $(git rev-parse --abbrev-ref HEAD)
 
@@ -167,7 +167,7 @@ workflows:
           #     only: master
             tags:
               only: /^v.*/
-          version: v0.1.2
+          version: v0.1.1
           schema: platform
           context: cicd
       # - commit_and_push:
