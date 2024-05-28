@@ -14,33 +14,67 @@ parameters:
 jobs:
   take_snapshot:
     executor: python-executor
+    parameters:
+      version:
+        type: string
+        default: ""
+      schema:
+        type: string
+        default: ""
     steps:
       - checkout
       - run:
           name: Take Snapshot
           command: |
-            mkdir -p snapshots
-            ./snapshot_schema.sh platform snapshots/current_snapshot.sql
+            mkdir -p snapshots/<< parameters.schema >>
+            ./snapshot_schema.sh << parameters.schema >> snapshots/<< parameters.schema >>/snapshot.sql
+            if [ -f snapshots/<< parameters.schema >>/snapshot.sql ]; then
+              echo "Snapshot taken successfully."
+              ls snapshots/<< parameters.schema >>
+            else
+              echo "Snapshot failed."
+              exit 1
+            fi
       - persist_to_workspace:
-          root: .
+          root: snapshots
           paths:
-            - snapshots
+            - << parameters.schema >>/snapshot.sql
 
   compare_schemas:
     executor: python-executor
+    parameters:
+      version:
+        type: string
+        default: ""
+      schema:
+        type: string
+        default: ""
     steps:
       - checkout
       - attach_workspace:
-          at: .
+          at: ./snapshots
       - run:
           name: Compare Schemas
           command: |
-            mkdir -p diffs
-            if ./compare_schemas.sh snapshots/current_snapshot.sql backups/platform/previous_snapshot.sql diffs/schema_diff.txt; then
+            mkdir -p diffs/<< parameters.schema >>
+            echo "Current dir: $(pwd)"
+            ls diffs/<< parameters.schema >>
+            ls snapshots/<< parameters.schema >>
+            if ./compare_schema.sh snapshots/<< parameters.schema >>/snapshot.sql backup/<< parameters.schema >>/snapshot.sql diffs/<< parameters.schema >>/schema_diff.sql; then
               echo "No differences found. Continuing deployment."
+              rm -rf snapshots
             else
-              echo "Differences found. Creating diff file."
-              git add diffs/schema_diff.txt
+              rm -rf snapshots
+              ls
+              echo "Differences found. Creating diff file and commit."
+              ls diffs/<< parameters.schema >>
+              GIT_USER_NAME=$(git config --get user.name || echo "rulo_ingefull")
+              GIT_USER_EMAIL=$(git config --get user.email || echo "rsosa.ingefull@gmail.com")
+              echo "Name: $GIT_USER_NAME"
+              echo "Mail: $GIT_USER_EMAIL"
+              git config --global user.name "$GIT_USER_NAME"
+              git config --global user.email "$GIT_USER_EMAIL"
+              git add diffs/<< parameters.schema >>/schema_diff.sql
               git commit -m "Found schema differences [ci skip]"
               git push origin $(git rev-parse --abbrev-ref HEAD)
               exit 1
@@ -55,9 +89,6 @@ jobs:
       schema:
         type: string
         default: ""
-    # environment:
-    #   DB_HOST: 0.tcp.sa.ngrok.io
-    #   DB_PORT: 16687
     steps:
       - checkout
       - attach_workspace:
@@ -111,7 +142,8 @@ jobs:
       - run:
           name: Clean Repository
           command: |
-            rm -f diffs/schema_diff.txt
+            ls
+            rm -f diffs/schema_diff.sql
             git commit -am "Clean up after deployment [ci skip]"
             git push origin $(git rev-parse --abbrev-ref HEAD)
 
