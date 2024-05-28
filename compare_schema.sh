@@ -13,6 +13,8 @@ fi
 # Check if the previous snapshot file exists
 if [ ! -f "$PREVIOUS_SNAPSHOT" ]; then
   echo "Previous snapshot file $PREVIOUS_SNAPSHOT does not exist."
+  touch $PREVIOUS_SNAPSHOT
+  diff -u "$PREVIOUS_SNAPSHOT" "$NEW_SNAPSHOT" > "$DIFF_OUTPUT"
   exit 1
 fi
 
