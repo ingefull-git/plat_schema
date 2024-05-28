@@ -94,7 +94,7 @@ jobs:
       - attach_workspace:
           at: .
       - setup_remote_docker:
-          version: 20.10.7
+          version: default
       # - add_ssh_keys:
       #     fingerprints:
       #       - "mpwb+fo8b0vSe3cC4/2yEp1GBc6908FGNp/XYj6rJMA"
