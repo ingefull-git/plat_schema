@@ -27,9 +27,9 @@ jobs:
           name: Take Snapshot
           command: |
             mkdir -p snapshots
-            ./snapshot_schema.sh << parameters.schema >> snapshot.sql
+            ./snapshot_schema.sh << parameters.schema >> snapshots/snapshot.sql
       - persist_to_workspace:
-          root: .
+          # root: .
           paths:
             - snapshots
 
@@ -45,18 +45,20 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: .
+          at: snapshots
       - run:
           name: Compare Schemas
           command: |
             mkdir -p diffs
             echo "Current dir: $(pwd)"
             ls
-            if ./compare_schemas.sh snapshot.sql backups/<< parameters.schema >>/snapshot.sql diffs/<< parameters.schema >>/schema_diff.sql; then
+            if ./compare_schema.sh snapshots/snapshot.sql backups/<< parameters.schema >>/snapshot.sql diffs/<< parameters.schema >>/schema_diff.sql; then
               echo "No differences found. Continuing deployment."
+              rm -rf snapshots
             else
+              rm -rf snapshots
               echo "Differences found. Creating diff file and commit."
-              ls
+              find schema_diff.sql
               git add diffs/schema_diff.sql
               git commit -m "Found schema differences [ci skip]"
               git push origin $(git rev-parse --abbrev-ref HEAD)
@@ -125,7 +127,7 @@ jobs:
       - run:
           name: Clean Repository
           command: |
-            ls
+          ls
             rm -f diffs/schema_diff.sql
             git commit -am "Clean up after deployment [ci skip]"
             git push origin $(git rev-parse --abbrev-ref HEAD)
