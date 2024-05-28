@@ -60,7 +60,7 @@ jobs:
             echo "Current dir: $(pwd)"
             ls
             ls snapshots
-            if ./compare_schema.sh snapshots/snapshot.sql backups/<< parameters.schema >>/snapshot.sql diffs/<< parameters.schema >>/schema_diff.sql; then
+            if ./compare_schema.sh snapshots/snapshot.sql backup/<< parameters.schema >>/snapshot.sql diffs/<< parameters.schema >>/schema_diff.sql; then
               echo "No differences found. Continuing deployment."
               rm -rf snapshots
             else
