@@ -12,15 +12,8 @@ parameters:
     default: ""
 
 jobs:
-  check_for_failure:
+  check_error:
     executor: python-executor
-    parameters:
-      version:
-        type: string
-        default: ""
-      schema:
-        type: string
-        default: ""
     steps:
       - checkout
       - run:
@@ -84,7 +77,9 @@ jobs:
               echo "No differences found. Continuing deployment."
               rm -rf snapshots
               rm -rf diffs
-              rm << parameters.schema >>/snapshot.sql
+              if [ ! -f << parameters.schema >>/snapshot.sql ]; then
+                rm << parameters.schema >>/snapshot.sql
+              fi
             else
               rm -rf snapshots
               ls
@@ -160,12 +155,12 @@ workflows:
   version: 2
   deploy_on_tag:
     jobs:
-      - check_for_failure:
+      - check_error:
           schema: platform
           context: cicd
       - take_snapshot:
           requires:
-            - check_for_failure
+            - check_error
           schema: platform
           context: cicd
       - compare_schemas:
