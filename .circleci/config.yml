@@ -77,7 +77,7 @@ jobs:
               echo "No differences found. Continuing deployment."
               rm -rf snapshots
               rm -rf diffs
-              if [ ! -f << parameters.schema >>/snapshot.sql ]; then
+              if [ -f << parameters.schema >>/snapshot.sql ]; then
                 rm << parameters.schema >>/snapshot.sql
               fi
             else
