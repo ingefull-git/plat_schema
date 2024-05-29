@@ -145,7 +145,7 @@ jobs:
           name: Commit schema changes
           command: |
             echo "Git status:"
-            git add << parameters.schema >> backup/<< parameters.schema >>
+            git add .
             git status
             git commit -m "Updated plan files and schema snapshot [ci skip]"
             git push origin $(git rev-parse --abbrev-ref HEAD)
@@ -173,6 +173,6 @@ workflows:
           filters:
             tags:
               only: /^v.*/
-          version: v0.1.2
+          version: v0.1.1
           schema: platform
           context: cicd
