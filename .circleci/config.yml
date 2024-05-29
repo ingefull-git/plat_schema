@@ -24,10 +24,6 @@ jobs:
               echo "Failing build due to ci flag in commit message."
               exit 1
             fi
-            if [[ "$LAST_COMMIT_MSG" == *"[ci pass]"* ]]; then
-              echo "Passing build due to ci flag in commit message."
-              exit 0
-            fi
 
   take_snapshot:
     executor: python-executor
@@ -43,6 +39,11 @@ jobs:
       - run:
           name: Take Snapshot
           command: |
+            LAST_COMMIT_MSG=$(git log -1 --pretty=%B)
+            if [[ "$LAST_COMMIT_MSG" == *"[ci pass]"* ]]; then
+              echo "Passing build due to ci flag in commit message."
+              exit 0
+            fi
             mkdir -p snapshots/<< parameters.schema >>
             ./snapshot_schema.sh << parameters.schema >> snapshots/<< parameters.schema >>/snapshot.sql
             if [ -f snapshots/<< parameters.schema >>/snapshot.sql ]; then
@@ -73,6 +74,11 @@ jobs:
       - run:
           name: Compare Schemas
           command: |
+            LAST_COMMIT_MSG=$(git log -1 --pretty=%B)
+            if [[ "$LAST_COMMIT_MSG" == *"[ci pass]"* ]]; then
+              echo "Passing build due to ci flag in commit message."
+              exit 0
+            fi
             mkdir -p diffs/<< parameters.schema >>
             echo "Current dir: $(pwd)"
             ls diffs/<< parameters.schema >>
@@ -117,6 +123,11 @@ jobs:
       - run:
           name: Install dependencies
           command: |
+            LAST_COMMIT_MSG=$(git log -1 --pretty=%B)
+            if [[ "$LAST_COMMIT_MSG" == *"[ci pass]"* ]]; then
+              echo "Passing build due to ci flag in commit message."
+              exit 0
+            fi
             python -m venv venv
             . venv/bin/activate
             pip install --upgrade pip
@@ -125,6 +136,11 @@ jobs:
       - run:
           name: Deploy schemas
           command: |
+            LAST_COMMIT_MSG=$(git log -1 --pretty=%B)
+            if [[ "$LAST_COMMIT_MSG" == *"[ci pass]"* ]]; then
+              echo "Passing build due to ci flag in commit message."
+              exit 0
+            fi
             . venv/bin/activate
             if tool_deployer -e caiso -a deploy -v "<< parameters.version >>" -st all -sch << parameters.schema >> 2>&1 | tee /dev/tty | grep -q 'ERROR'; then
               echo "Deployment failed with errors."
@@ -135,6 +151,11 @@ jobs:
       - run:
           name: Configure git
           command: |
+            LAST_COMMIT_MSG=$(git log -1 --pretty=%B)
+            if [[ "$LAST_COMMIT_MSG" == *"[ci pass]"* ]]; then
+              echo "Passing build due to ci flag in commit message."
+              exit 0
+            fi
             GIT_USER_NAME=$(git config --get user.name || echo "rulo_ingefull")
             GIT_USER_EMAIL=$(git config --get user.email || echo "rsosa.ingefull@gmail.com")
             echo "Name: $GIT_USER_NAME"
@@ -144,10 +165,20 @@ jobs:
       - run:
           name: Take Post-deployment Snapshot
           command: |
+            LAST_COMMIT_MSG=$(git log -1 --pretty=%B)
+            if [[ "$LAST_COMMIT_MSG" == *"[ci pass]"* ]]; then
+              echo "Passing build due to ci flag in commit message."
+              exit 0
+            fi
             ./snapshot_schema.sh << parameters.schema >> backup/<< parameters.schema >>/snapshot.sql
       - run:
           name: Commit schema changes
           command: |
+            LAST_COMMIT_MSG=$(git log -1 --pretty=%B)
+            if [[ "$LAST_COMMIT_MSG" == *"[ci pass]"* ]]; then
+              echo "Passing build due to ci flag in commit message."
+              exit 0
+            fi
             echo "Git status:"
             git add .
             git status
