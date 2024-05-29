@@ -20,7 +20,7 @@ jobs:
           name: Check Last Commit Message for Error Flag
           command: |
             LAST_COMMIT_MSG=$(git log -1 --pretty=%B)
-            if [[ "$LAST_COMMIT_MSG" == *"[ci error]"* ]] || [[ "$LAST_COMMIT_MSG" != *"Merge pull request"* ]]; then
+            if [[ "$LAST_COMMIT_MSG" == *"[ci error]"* ]] || [[ "$LAST_COMMIT_MSG" == *"Merge pull request"* ]]; then
               echo "Failing build due to ci flag in commit message."
               exit 1
             fi
