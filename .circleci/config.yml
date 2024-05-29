@@ -43,6 +43,7 @@ jobs:
             if [[ "$LAST_COMMIT_MSG" == *"[ci pass]"* ]]; then
               echo "Passing build due to ci flag in commit message."
               mkdir -p snapshots/<< parameters.schema >>
+              touch snapshots/<< parameters.schema >>/snapshot.sql
               exit 0
             fi
             mkdir -p snapshots/<< parameters.schema >>
