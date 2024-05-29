@@ -20,7 +20,7 @@ SET row_security = off;
 -- Name: platform; Type: SCHEMA; Schema: -; Owner: -
 --
 
-+CREATE SCHEMA platform;
+CREATE SCHEMA platform;
 
 
 --
