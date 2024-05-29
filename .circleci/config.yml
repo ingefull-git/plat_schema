@@ -24,6 +24,10 @@ jobs:
               echo "Failing build due to ci flag in commit message."
               exit 1
             fi
+            if [[ "$LAST_COMMIT_MSG" == *"[ci pass]"* ]]; then
+              echo "Passing build due to ci flag in commit message."
+              exit 0
+            fi
 
   take_snapshot:
     executor: python-executor
