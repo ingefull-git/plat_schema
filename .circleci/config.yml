@@ -156,7 +156,6 @@ workflows:
   deploy_on_tag:
     jobs:
       - check_error:
-          schema: platform
           context: cicd
       - take_snapshot:
           requires:
