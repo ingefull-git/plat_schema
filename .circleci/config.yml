@@ -64,6 +64,7 @@ jobs:
               echo "No differences found. Continuing deployment."
               rm -rf snapshots
               rm -rf diffs
+              rm << parameters.schema >>/snapshot.sql
             else
               rm -rf snapshots
               ls
@@ -92,8 +93,8 @@ jobs:
         default: ""
     steps:
       - checkout
-      - attach_workspace:
-          at: .
+      # - attach_workspace:
+      #     at: .
       - setup_remote_docker:
           version: default
       # - add_ssh_keys:
