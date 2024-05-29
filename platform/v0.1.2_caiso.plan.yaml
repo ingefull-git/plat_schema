@@ -7,9 +7,9 @@ steps:
   author: some_name@mail.com
   date: 2024-05-15
   description: Add initial market tables
-  deployed: null
+  deployed: '2024-05-29T15:16:27.894325+00:00'
 - source: caiso/v0.1.2/add_column_is_admin
   author: some_name@mail.com
   date: 2024-05-15
   description: Add is_admin column
-  deployed: null
+  deployed: '2024-05-29T15:16:28.056124+00:00'
