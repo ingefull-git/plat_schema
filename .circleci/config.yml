@@ -12,6 +12,19 @@ parameters:
     default: ""
 
 jobs:
+  check_error:
+    executor: python-executor
+    steps:
+      - checkout
+      - run:
+          name: Check Last Commit Message for Error Flag
+          command: |
+            LAST_COMMIT_MSG=$(git log -1 --pretty=%B)
+            if [[ "$LAST_COMMIT_MSG" == *"[ci error]"* ]]; then
+              echo "Failing build due to ci error flag in commit message."
+              exit 1
+            fi
+
   take_snapshot:
     executor: python-executor
     parameters:
@@ -64,7 +77,9 @@ jobs:
               echo "No differences found. Continuing deployment."
               rm -rf snapshots
               rm -rf diffs
-              rm << parameters.schema >>/snapshot.sql
+              if [ -f << parameters.schema >>/snapshot.sql ]; then
+                rm << parameters.schema >>/snapshot.sql
+              fi
             else
               rm -rf snapshots
               ls
@@ -76,12 +91,12 @@ jobs:
               echo "Mail: $GIT_USER_EMAIL"
               git config --global user.name "$GIT_USER_NAME"
               git config --global user.email "$GIT_USER_EMAIL"
-              git add diffs/<< parameters.schema >>/schema_diff.sql
-              git commit -m "Found schema differences [ci skip]"
+              git add .
+              git commit -m "Found schema differences [ci error]"
               git push origin $(git rev-parse --abbrev-ref HEAD)
               exit 1
             fi
-      
+
   deploy:
     executor: python-executor
     parameters:
@@ -93,13 +108,8 @@ jobs:
         default: ""
     steps:
       - checkout
-      # - attach_workspace:
-      #     at: .
       - setup_remote_docker:
           version: default
-      # - add_ssh_keys:
-      #     fingerprints:
-      #       - "mpwb+fo8b0vSe3cC4/2yEp1GBc6908FGNp/XYj6rJMA"
       - run:
           name: Install dependencies
           command: |
@@ -139,28 +149,17 @@ jobs:
             git status
             git commit -m "Updated plan files and schema snapshot [ci skip]"
             git push origin $(git rev-parse --abbrev-ref HEAD)
-      # - run:
-      #     name: Debug and Push changes
-      #     command: |
-      #       echo "Current branch: $(git rev-parse --abbrev-ref HEAD)"
-      #       echo "Git status:"
-      #       git status
-      #       echo "Pushing changes..."
-      #       git push origin $(git rev-parse --abbrev-ref HEAD)
-      # - run:
-      #     name: Clean Repository
-      #     command: |
-      #       ls
-      #       rm -rf diffs
-      #       rm -rf snapshots/<< parameters.schema >>
-      #       git commit -am "Clean up after deployment [ci skip]"
-      #       git push origin $(git rev-parse --abbrev-ref HEAD)
+
 
 workflows:
   version: 2
   deploy_on_tag:
     jobs:
+      - check_error:
+          context: cicd
       - take_snapshot:
+          requires:
+            - check_error
           schema: platform
           context: cicd
       - compare_schemas:
@@ -172,16 +171,8 @@ workflows:
           requires:
             - compare_schemas
           filters:
-          #   branches:
-          #     only: master
             tags:
               only: /^v.*/
-          version: v0.1.2
+          version: v0.1.1
           schema: platform
           context: cicd
-      # - commit_and_push:
-      #     requires:
-      #       - deploy
-      #     filters:
-      #       tags:
-      #         only: /^v.*/
