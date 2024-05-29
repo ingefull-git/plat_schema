@@ -26,3 +26,4 @@ CREATE SCHEMA platform;
 --
 -- PostgreSQL database dump complete
 --
+
