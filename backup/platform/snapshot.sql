@@ -66,7 +66,8 @@ CREATE TABLE platform.users (
     id integer NOT NULL,
     name character varying(100) NOT NULL,
     email character varying(100) NOT NULL,
-    created_on timestamp with time zone DEFAULT now() NOT NULL
+    created_on timestamp with time zone DEFAULT now() NOT NULL,
+    is_admin boolean DEFAULT false NOT NULL
 );
 
 
