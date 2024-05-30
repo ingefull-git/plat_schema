@@ -92,8 +92,8 @@ VALUES
 INSERT INTO asset_data
     (id, asset_id, tag, data, start_time, created_by, deleted)
 VALUES
-    (3396,59,'strategy','{"market": "RTM", "deviation_charge": 50, "daily_cycle_limit": 1.25, "deviation_discharge": 50, "risk_rtm_energy_charge": 20, "risk_rtm_energy_discharge": 20, "limit_charging_bid_capacity": false, "throughput_opportunity_cost": 0, "renewable_forecast_adjustment_itc": 100}',2024-01-25 18:00:00.000000 +00:00,1,false),
-    (3324,71,'strategy','{"market": "DAM", "risk_spin": 0, "bidding_strategy": "OPTIMAL_REVENUE", "daily_cycle_limit": 1, "risk_regulation_up": 100, "risk_regulation_down": 100, "optimization_algorithm": "STOCHASTIC", "risk_dam_energy_charge": 40, "risk_dam_energy_discharge": 20, "limit_charging_bid_capacity": false, "throughput_opportunity_cost": 0, "limit_discharging_bid_capacity": false, "renewable_forecast_adjustment_itc": 70, "renewable_forecast_adjustment_poi": 110}',2023-10-24 07:00:00.000000 +00:00,1,false)
+    (3396,59,'strategy','{"market": "RTM", "deviation_charge": 50, "daily_cycle_limit": 1.25, "deviation_discharge": 50, "risk_rtm_energy_charge": 20, "risk_rtm_energy_discharge": 20, "limit_charging_bid_capacity": false, "throughput_opportunity_cost": 0, "renewable_forecast_adjustment_itc": 100}','2024-01-25 18:00:00.000000 +00:00',1,false),
+    (3324,71,'strategy','{"market": "DAM", "risk_spin": 0, "bidding_strategy": "OPTIMAL_REVENUE", "daily_cycle_limit": 1, "risk_regulation_up": 100, "risk_regulation_down": 100, "optimization_algorithm": "STOCHASTIC", "risk_dam_energy_charge": 40, "risk_dam_energy_discharge": 20, "limit_charging_bid_capacity": false, "throughput_opportunity_cost": 0, "limit_discharging_bid_capacity": false, "renewable_forecast_adjustment_itc": 70, "renewable_forecast_adjustment_poi": 110}','2023-10-24 07:00:00.000000 +00:00',1,false)
     ON CONFLICT DO NOTHING;
 
 
