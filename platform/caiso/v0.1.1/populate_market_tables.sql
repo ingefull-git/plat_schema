@@ -44,12 +44,6 @@ VALUES
     (59,'LAB',89,'{"has_itc": true, "has_poi": false, "is_live": true, "latitude": 34.6885197, "longitude": -118.3092997, "asset_type": "battery_ifom", "tag_prefix": "battery", "customer_id": 3848, "data_sources": {"OMS": {"environment": "production"}, "CMRI": {"lookback": 3, "description": "", "environment": "production"}, "telemetry_source": {}}, "can_charge_from": [98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113], "number_batteries": 1, "number_inverters": 1, "spin_capacity_kw": 254000, "parasitic_load_kw": 0, "battery_capacity_kwh": 508000, "degradation_cost_kwh": 0, "inverter_charge_rate": 127000, "commercial_online_date": "2022-09-26", "inverter_discharge_rate": 127000, "lower_regulating_limit_kw": 127000, "regulation_up_capacity_kw": 254000, "upper_regulating_limit_kw": 127000, "regulation_down_capacity_kw": 254000}',3848, 1, 1, 1)
     ON CONFLICT DO NOTHING;
 
-INSERT INTO asset_data
-    (id, asset_id, name) 
-VALUES
-    (1, 'meter')
-    ON CONFLICT DO NOTHING;
-
 
 INSERT INTO market
     (id, name, data, description, market_type_id)
