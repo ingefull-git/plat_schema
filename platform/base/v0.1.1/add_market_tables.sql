@@ -605,7 +605,7 @@ CREATE TABLE IF NOT EXISTS configuration (
     created_by int NOT NULL,
     deleted bool NOT NULL,
     deleted_by int NOT NULL,
-    PRIMARY KEY (asset_id, start_time, hour_ending, market, created_on),
+    PRIMARY KEY (asset_id, start_time, hour_ending, market_id, created_on),
     FOREIGN KEY (asset_id)
         REFERENCES asset(id),
     FOREIGN KEY (market_id)
