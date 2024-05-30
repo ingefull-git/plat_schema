@@ -137,14 +137,14 @@ INSERT INTO market_product_xref
 INSERT INTO configuration
     (asset_id, market_id, hour_ending, start_time, data, created_by, deleted, deleted_by)
 VALUES
-    (59,1,'2024-03-15 07:00:00.000000 +00:00','2024-03-20 07:00:00.000000 +00:00','{"ramp_rate": 0, "min_soe_eod": 0, "charging_efficiency": 0.878, "max_daily_average_soc": 1, "round_trip_efficiency": 0.878, "discharging_efficiency": 1}',1,false,1),
-    (59,1,'2024-03-15 08:00:00.000000 +00:00','2024-03-20 07:00:00.000000 +00:00','{"ramp_rate": 0, "min_soe_eod": 0, "charging_efficiency": 0.878, "max_daily_average_soc": 1, "round_trip_efficiency": 0.878, "discharging_efficiency": 1}',1,false,1),
-    (59,1,'2024-03-15 09:00:00.000000 +00:00','2024-03-20 07:00:00.000000 +00:00','{"ramp_rate": 0, "min_soe_eod": 0, "charging_efficiency": 0.878, "max_daily_average_soc": 1, "round_trip_efficiency": 0.878, "discharging_efficiency": 1}',1,false,1),
-    (59,1,'2024-03-15 10:00:00.000000 +00:00','2024-03-20 07:00:00.000000 +00:00','{"ramp_rate": 0, "min_soe_eod": 0, "charging_efficiency": 0.878, "max_daily_average_soc": 1, "round_trip_efficiency": 0.878, "discharging_efficiency": 1}',1,false,1),
-    (71,1,'2022-09-17 07:00:00.000000 +00:00','2022-09-16 07:00:00.000000 +00:00','{"lower_soe_kwh": 0, "upper_soe_kwh": 448000, "max_charge_power": 112000, "max_discharge_power": 112000, "regulation_up_throughput": 0.021, "regulation_down_throughput": 0.177}',1,false,1),
-    (71,1,'2022-09-17 08:00:00.000000 +00:00','2022-09-16 07:00:00.000000 +00:00','{"lower_soe_kwh": 0, "upper_soe_kwh": 448000, "max_charge_power": 112000, "max_discharge_power": 112000, "regulation_up_throughput": 0.021, "regulation_down_throughput": 0.177}',1,false,1),
-    (71,1,'2022-09-17 09:00:00.000000 +00:00','2022-09-16 07:00:00.000000 +00:00','{"lower_soe_kwh": 0, "upper_soe_kwh": 448000, "max_charge_power": 112000, "max_discharge_power": 112000, "regulation_up_throughput": 0.021, "regulation_down_throughput": 0.177}',1,false,1),
-    (71,1,'2022-09-17 10:00:00.000000 +00:00','2022-09-16 07:00:00.000000 +00:00','{"lower_soe_kwh": 0, "upper_soe_kwh": 448000, "max_charge_power": 112000, "max_discharge_power": 112000, "regulation_up_throughput": 0.021, "regulation_down_throughput": 0.177}',1,false,1)
+    (59,1,0,'2024-03-20 07:00:00.000000 +00:00','{"ramp_rate": 0, "min_soe_eod": 0, "charging_efficiency": 0.878, "max_daily_average_soc": 1, "round_trip_efficiency": 0.878, "discharging_efficiency": 1}',1,false,1),
+    (59,1,1,'2024-03-20 07:00:00.000000 +00:00','{"ramp_rate": 0, "min_soe_eod": 0, "charging_efficiency": 0.878, "max_daily_average_soc": 1, "round_trip_efficiency": 0.878, "discharging_efficiency": 1}',1,false,1),
+    (59,1,2,'2024-03-20 07:00:00.000000 +00:00','{"ramp_rate": 0, "min_soe_eod": 0, "charging_efficiency": 0.878, "max_daily_average_soc": 1, "round_trip_efficiency": 0.878, "discharging_efficiency": 1}',1,false,1),
+    (59,1,3,'2024-03-20 07:00:00.000000 +00:00','{"ramp_rate": 0, "min_soe_eod": 0, "charging_efficiency": 0.878, "max_daily_average_soc": 1, "round_trip_efficiency": 0.878, "discharging_efficiency": 1}',1,false,1),
+    (71,1,0,'2022-09-16 07:00:00.000000 +00:00','{"lower_soe_kwh": 0, "upper_soe_kwh": 448000, "max_charge_power": 112000, "max_discharge_power": 112000, "regulation_up_throughput": 0.021, "regulation_down_throughput": 0.177}',1,false,1),
+    (71,1,1,'2022-09-16 07:00:00.000000 +00:00','{"lower_soe_kwh": 0, "upper_soe_kwh": 448000, "max_charge_power": 112000, "max_discharge_power": 112000, "regulation_up_throughput": 0.021, "regulation_down_throughput": 0.177}',1,false,1),
+    (71,1,2,'2022-09-16 07:00:00.000000 +00:00','{"lower_soe_kwh": 0, "upper_soe_kwh": 448000, "max_charge_power": 112000, "max_discharge_power": 112000, "regulation_up_throughput": 0.021, "regulation_down_throughput": 0.177}',1,false,1),
+    (71,1,3,'2022-09-16 07:00:00.000000 +00:00','{"lower_soe_kwh": 0, "upper_soe_kwh": 448000, "max_charge_power": 112000, "max_discharge_power": 112000, "regulation_up_throughput": 0.021, "regulation_down_throughput": 0.177}',1,false,1)
     ON CONFLICT DO NOTHING;
 
 
