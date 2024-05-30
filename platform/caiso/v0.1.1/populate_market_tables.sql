@@ -54,9 +54,9 @@ VALUES
 INSERT INTO market
     (id, name, data, description, market_type_id)
 VALUES
-    (1, 'DAM', {}, 'Dayahead Market Type', 1),
-    (2, 'FMM', {}, '', 2),
-    (3, 'RTM', {}, '', 3)
+    (1, 'DAM', '{}', 'Dayahead Market Type', 1),
+    (2, 'FMM', '{}', 'Fifteen-Minute Market Market Type', 2),
+    (3, 'RTM', '{}', 'Realtime Market Type', 3)
     ON CONFLICT DO NOTHING;
 
 
