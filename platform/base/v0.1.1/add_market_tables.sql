@@ -337,8 +337,8 @@ CREATE TABLE IF NOT EXISTS product (
         REFERENCES product_type(id)
 );
 
-CREATE INDEX IF NOT EXISTS ON product USING btree (market_id);
-CREATE INDEX IF NOT EXISTS ON product USING btree (name);
+CREATE INDEX IF NOT EXISTS product_market_id_idx ON product USING btree (market_id);
+CREATE INDEX IF NOT EXISTS product_name_idx ON product USING btree (name);
 
 COMMENT ON TABLE product
     IS 'This table defined general products used in different ISOs/RTOs.';

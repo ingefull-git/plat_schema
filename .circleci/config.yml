@@ -146,7 +146,7 @@ jobs:
             . venv/bin/activate
             if tool_deployer -e caiso -a deploy -v "<< parameters.version >>" -st all -sch << parameters.schema >> 2>&1 | tee /dev/tty | grep -q 'ERROR'; then
               echo "Deployment failed with errors."
-              
+            exit 1
             else
               echo "Deployment succeeded."
             fi
