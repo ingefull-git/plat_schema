@@ -130,7 +130,7 @@ INSERT INTO market_product_xref
     JOIN 
         market mk ON mk.name = 'RTM'
     WHERE
-        p.name = 'energy'
+        p.name = 'ENERGY'
     ON CONFLICT DO NOTHING;
 
 
