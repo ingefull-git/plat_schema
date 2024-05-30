@@ -57,7 +57,7 @@ VALUES
 INSERT INTO market_agent
     (id, name, iso_id, description, market_agent_code, level, created_by, last_modified_by)
 VALUES
-    (898, 'test_qse', 11, 'Test QSE', 'FAKEQSE', 1, 1)
+    (898, 'test_qse', 11, 'Test QSE', 'FAKEQSE', 'test_cert.pfx', 1, 1)
     ON CONFLICT DO NOTHING;
 
 
