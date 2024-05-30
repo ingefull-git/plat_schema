@@ -1,8 +1,6 @@
 -- kind: plan
 -- schema: platform
--- version: v0.0.2
-
--- Deploy caiso_platform_schema:v1.0.0_populate_platform_tables to pg
+-- version: v0.1.1
 
 BEGIN;
 
