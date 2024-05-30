@@ -93,7 +93,7 @@ jobs:
                 rm << parameters.schema >>/snapshot.sql
               fi
             else
-              rm -rf snapshots
+              
               ls
               echo "Differences found. Creating diff file and commit."
               ls diffs/<< parameters.schema >>

@@ -135,7 +135,7 @@ INSERT INTO market_product_xref
 
 
 INSERT INTO configuration
-    (asset_id, market_id, hour_ending, start_time, data, created_by, deleted, deleted_by)
+    (asset_id, market_id, hour_ending, start_time, datas, created_by, deleted, deleted_by)
 VALUES
     (59,1,0,'2024-03-20 07:00:00.000000 +00:00','{"ramp_rate": 0, "min_soe_eod": 0, "charging_efficiency": 0.878, "max_daily_average_soc": 1, "round_trip_efficiency": 0.878, "discharging_efficiency": 1}',1,false,1),
     (59,1,1,'2024-03-20 07:00:00.000000 +00:00','{"ramp_rate": 0, "min_soe_eod": 0, "charging_efficiency": 0.878, "max_daily_average_soc": 1, "round_trip_efficiency": 0.878, "discharging_efficiency": 1}',1,false,1),
