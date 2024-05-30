@@ -144,8 +144,8 @@ CREATE TABLE IF NOT EXISTS host_customer (
     scheduling_coordinator_id varchar
 );
 
-CREATE UNIQUE INDEX idx_customer_quickbase_record_id ON host_customer USING btree (quickbase_record_id);
-CREATE UNIQUE INDEX idx_customer_salesforce_record_id ON host_customer USING btree (salesforce_record_id);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_customer_quickbase_record_id ON host_customer USING btree (quickbase_record_id);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_customer_salesforce_record_id ON host_customer USING btree (salesforce_record_id);
 
 
 CREATE TABLE IF NOT EXISTS iso (
@@ -296,10 +296,10 @@ CREATE TABLE IF NOT EXISTS market_task (
         REFERENCES task_type(id)
 );
 
-CREATE INDEX idx_market_task_created_on ON market_task USING btree (created_on);
-CREATE INDEX idx_market_task_task_run_end ON market_task USING btree (task_run_end);
-CREATE INDEX idx_market_task_task_run_start ON market_task USING btree (task_run_start);
-CREATE INDEX idx_market_task_task_run_status ON market_task USING btree (task_run_status);
+CREATE INDEX IF NOT EXISTS idx_market_task_created_on ON market_task USING btree (created_on);
+CREATE INDEX IF NOT EXISTS idx_market_task_task_run_end ON market_task USING btree (task_run_end);
+CREATE INDEX IF NOT EXISTS idx_market_task_task_run_start ON market_task USING btree (task_run_start);
+CREATE INDEX IF NOT EXISTS idx_market_task_task_run_status ON market_task USING btree (task_run_status);
 
 
 CREATE TABLE IF NOT EXISTS permissions (
@@ -337,8 +337,8 @@ CREATE TABLE IF NOT EXISTS product (
         REFERENCES product_type(id)
 );
 
-CREATE INDEX ON product USING btree (market_id);
-CREATE INDEX ON product USING btree (name);
+CREATE INDEX IF NOT EXISTS ON product USING btree (market_id);
+CREATE INDEX IF NOT EXISTS ON product USING btree (name);
 
 COMMENT ON TABLE product
     IS 'This table defined general products used in different ISOs/RTOs.';
@@ -354,7 +354,7 @@ CREATE TABLE IF NOT EXISTS region (
         REFERENCES iso(id)
 );
 
-CREATE UNIQUE INDEX region_name ON region USING btree (name);
+CREATE UNIQUE INDEX IF NOT EXISTS region_name ON region USING btree (name);
 
 
 CREATE TABLE IF NOT EXISTS region_award (
@@ -422,9 +422,9 @@ CREATE TABLE IF NOT EXISTS asset (
         REFERENCES host_customer(id)
 );
 
-CREATE UNIQUE INDEX asset_name ON asset USING btree (name);
-CREATE INDEX asset_region_id ON asset USING btree (region_id);
-CREATE INDEX idx_asset_customer_id ON asset USING btree (customer_id);
+CREATE UNIQUE INDEX IF NOT EXISTS asset_name ON asset USING btree (name);
+CREATE INDEX IF NOT EXISTS asset_region_id ON asset USING btree (region_id);
+CREATE INDEX IF NOT EXISTS idx_asset_customer_id ON asset USING btree (customer_id);
 
 
 CREATE TABLE IF NOT EXISTS asset_data (
@@ -448,7 +448,7 @@ CREATE TABLE IF NOT EXISTS asset_data (
         REFERENCES users(id)
 );
 
-CREATE INDEX asset_data_asset_id_tag_idx ON asset_data USING btree (asset_id, tag);
+CREATE INDEX IF NOT EXISTS asset_data_asset_id_tag_idx ON asset_data USING btree (asset_id, tag);
 
 
 CREATE TABLE IF NOT EXISTS asset_meter (
@@ -497,8 +497,8 @@ CREATE TABLE IF NOT EXISTS asset_product_data (
         REFERENCES product(id)
 );
 
-CREATE INDEX apd_asset_id_product_id_tag_idx ON asset_product_data USING btree (asset_id, product_id, tag);
-CREATE INDEX apd_asset_id_tag_idx ON asset_product_data USING btree (asset_id, tag);
+CREATE INDEX IF NOT EXISTS apd_asset_id_product_id_tag_idx ON asset_product_data USING btree (asset_id, product_id, tag);
+CREATE INDEX IF NOT EXISTS apd_asset_id_tag_idx ON asset_product_data USING btree (asset_id, tag);
 
 
 CREATE TABLE IF NOT EXISTS asset_telemetry_data (
@@ -517,7 +517,7 @@ CREATE TABLE IF NOT EXISTS asset_telemetry_data (
         REFERENCES process_type(id)
 );
 
-CREATE INDEX idx_read_time ON asset_telemetry_data USING btree (read_time);
+CREATE INDEX IF NOT EXISTS idx_read_time ON asset_telemetry_data USING btree (read_time);
 
 COMMENT ON TABLE asset_telemetry_data
     IS '';
@@ -545,10 +545,10 @@ CREATE TABLE IF NOT EXISTS award (
         REFERENCES process_type(id)
 );
 
-CREATE INDEX idx_award_created_on ON award USING btree (created_on);
-CREATE INDEX idx_award_interval_end ON award USING btree (interval_end);
-CREATE INDEX idx_award_interval_start ON award USING btree (interval_start);
-CREATE INDEX idx_award_resource_type ON award USING btree (resource_type_id);
+CREATE INDEX IF NOT EXISTS idx_award_created_on ON award USING btree (created_on);
+CREATE INDEX IF NOT EXISTS idx_award_interval_end ON award USING btree (interval_end);
+CREATE INDEX IF NOT EXISTS idx_award_interval_start ON award USING btree (interval_start);
+CREATE INDEX IF NOT EXISTS idx_award_resource_type ON award USING btree (resource_type_id);
 
 
 CREATE TABLE IF NOT EXISTS bid (
@@ -572,10 +572,10 @@ CREATE TABLE IF NOT EXISTS bid (
         REFERENCES process_type(id)
 );
 
-CREATE INDEX idx_bid_asset_id ON bid USING btree (asset_id);
-CREATE INDEX idx_bid_created_on ON bid USING btree (created_on);
-CREATE INDEX idx_bid_interval_end ON bid USING btree (interval_end);
-CREATE INDEX idx_bid_interval_start ON bid USING btree (interval_start);
+CREATE INDEX IF NOT EXISTS idx_bid_asset_id ON bid USING btree (asset_id);
+CREATE INDEX IF NOT EXISTS idx_bid_created_on ON bid USING btree (created_on);
+CREATE INDEX IF NOT EXISTS idx_bid_interval_end ON bid USING btree (interval_end);
+CREATE INDEX IF NOT EXISTS idx_bid_interval_start ON bid USING btree (interval_start);
 
 
 CREATE TABLE IF NOT EXISTS bid_segment (
@@ -592,7 +592,7 @@ CREATE TABLE IF NOT EXISTS bid_segment (
         REFERENCES bid(id)
 );
 
-CREATE INDEX idx_bid_segment_bid_id ON bid_segment USING btree (bid_id);
+CREATE INDEX IF NOT EXISTS idx_bid_segment_bid_id ON bid_segment USING btree (bid_id);
 
 
 CREATE TABLE IF NOT EXISTS configuration (
@@ -641,11 +641,11 @@ CREATE TABLE IF NOT EXISTS cop_limit (
         REFERENCES process_type(id)
 );
 
-CREATE INDEX idx_cop_limit_created_on ON cop_limit USING btree (created_on);
-CREATE INDEX idx_cop_limit_interval_end ON cop_limit USING btree (interval_end);
-CREATE INDEX idx_cop_limit_interval_start ON cop_limit USING btree (interval_start);
-CREATE INDEX idx_cop_limit_limit_type ON cop_limit USING btree (limit_type_id);
-CREATE INDEX idx_cop_limit_resource_type ON cop_limit USING btree (resource_type_id);
+CREATE INDEX IF NOT EXISTS idx_cop_limit_created_on ON cop_limit USING btree (created_on);
+CREATE INDEX IF NOT EXISTS idx_cop_limit_interval_end ON cop_limit USING btree (interval_end);
+CREATE INDEX IF NOT EXISTS idx_cop_limit_interval_start ON cop_limit USING btree (interval_start);
+CREATE INDEX IF NOT EXISTS idx_cop_limit_limit_type ON cop_limit USING btree (limit_type_id);
+CREATE INDEX IF NOT EXISTS idx_cop_limit_resource_type ON cop_limit USING btree (resource_type_id);
 
 
 CREATE TABLE IF NOT EXISTS cop_product (
@@ -670,10 +670,10 @@ CREATE TABLE IF NOT EXISTS cop_product (
         REFERENCES process_type(id)
 );
 
-CREATE INDEX idx_cop_product_created_on ON cop_product USING btree (created_on);
-CREATE INDEX idx_cop_product_interval_end ON cop_product USING btree (interval_end);
-CREATE INDEX idx_cop_product_interval_start ON cop_product USING btree (interval_start);
-CREATE INDEX idx_cop_product_resource_type ON cop_product USING btree (resource_type_id);
+CREATE INDEX IF NOT EXISTS idx_cop_product_created_on ON cop_product USING btree (created_on);
+CREATE INDEX IF NOT EXISTS idx_cop_product_interval_end ON cop_product USING btree (interval_end);
+CREATE INDEX IF NOT EXISTS idx_cop_product_interval_start ON cop_product USING btree (interval_start);
+CREATE INDEX IF NOT EXISTS idx_cop_product_resource_type ON cop_product USING btree (resource_type_id);
 
 
 CREATE TABLE IF NOT EXISTS cop_status (
@@ -699,10 +699,10 @@ CREATE TABLE IF NOT EXISTS cop_status (
         REFERENCES process_type(id)
 );
 
-CREATE INDEX idx_cop_status_created_on ON cop_status USING btree (created_on);
-CREATE INDEX idx_cop_status_interval_end ON cop_status USING btree (interval_end);
-CREATE INDEX idx_cop_status_interval_start ON cop_status USING btree (interval_start);
-CREATE INDEX idx_cop_status_resource_type ON cop_status USING btree (resource_type_id);
+CREATE INDEX IF NOT EXISTS idx_cop_status_created_on ON cop_status USING btree (created_on);
+CREATE INDEX IF NOT EXISTS idx_cop_status_interval_end ON cop_status USING btree (interval_end);
+CREATE INDEX IF NOT EXISTS idx_cop_status_interval_start ON cop_status USING btree (interval_start);
+CREATE INDEX IF NOT EXISTS idx_cop_status_resource_type ON cop_status USING btree (resource_type_id);
 
 
 CREATE TABLE IF NOT EXISTS input_cop_limit (
@@ -775,9 +775,9 @@ CREATE TABLE IF NOT EXISTS market_permission_grants (
         REFERENCES users(id)
 );
 
-CREATE INDEX idx_market_permission_grants_permission_id ON market_permission_grants USING btree (permission_id);
-CREATE INDEX idx_market_permission_grants_user_id ON market_permission_grants USING btree (user_id);
-CREATE INDEX idx_market_permission_grants_user_id_permission_id ON market_permission_grants USING btree (user_id, permission_id);
+CREATE INDEX IF NOT EXISTS idx_market_permission_grants_permission_id ON market_permission_grants USING btree (permission_id);
+CREATE INDEX IF NOT EXISTS idx_market_permission_grants_user_id ON market_permission_grants USING btree (user_id);
+CREATE INDEX IF NOT EXISTS idx_market_permission_grants_user_id_permission_id ON market_permission_grants USING btree (user_id, permission_id);
 
 
 CREATE TABLE IF NOT EXISTS market_product_xref (
@@ -846,10 +846,10 @@ CREATE TABLE IF NOT EXISTS settlement (
         REFERENCES process_type(id)
 );
 
-CREATE INDEX idx_settlement_created_on ON settlement USING btree (created_on);
-CREATE INDEX idx_settlement_interval_end ON settlement USING btree (interval_end);
-CREATE INDEX idx_settlement_interval_start ON settlement USING btree (interval_start);
-CREATE INDEX idx_settlement_resource_type ON settlement USING btree (resource_type_id);
+CREATE INDEX IF NOT EXISTS idx_settlement_created_on ON settlement USING btree (created_on);
+CREATE INDEX IF NOT EXISTS idx_settlement_interval_end ON settlement USING btree (interval_end);
+CREATE INDEX IF NOT EXISTS idx_settlement_interval_start ON settlement USING btree (interval_start);
+CREATE INDEX IF NOT EXISTS idx_settlement_resource_type ON settlement USING btree (resource_type_id);
 
 
 CREATE TABLE IF NOT EXISTS asset_market_product_xref (
