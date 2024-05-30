@@ -64,8 +64,8 @@ VALUES
 INSERT INTO resource
     (id, name, resource_type_id, market_agent_id, asset_id, created_by, last_modified_by)
 VALUES
-    (1, 'TEST_BESS_GEN', 1, 898, 1, 1, 1),
-    (2, 'TEST_BESS_LOAD', 2, 898, 1, 1, 1)
+    (1, 'TEST_BESS_GEN', 1, 898, 59, 1, 1),
+    (2, 'TEST_BESS_LOAD', 2, 898, 71, 1, 1)
     ON CONFLICT DO NOTHING;
 
 
