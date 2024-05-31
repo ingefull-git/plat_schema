@@ -1,27 +1,9 @@
---- backup/platform/snapshot.sql	2024-05-31 14:14:38.027744790 +0000
-+++ snapshots/platform/snapshot.sql	2024-05-31 14:14:26.000000000 +0000
-@@ -5,3 +5,3253 @@
- -- Dumped from database version 16.2 (Debian 16.2-1.pgdg120+2)
- -- Dumped by pg_dump version 16.3 (Debian 16.3-1.pgdg110+1)
+--- backup/platform/snapshot.sql	2024-05-31 14:30:00.404452193 +0000
++++ snapshots/platform/snapshot.sql	2024-05-31 14:29:47.000000000 +0000
+@@ -23,6 +23,3234 @@
+ CREATE SCHEMA platform;
  
-+SET statement_timeout = 0;
-+SET lock_timeout = 0;
-+SET idle_in_transaction_session_timeout = 0;
-+SET client_encoding = 'UTF8';
-+SET standard_conforming_strings = on;
-+SELECT pg_catalog.set_config('search_path', '', false);
-+SET check_function_bodies = false;
-+SET xmloption = content;
-+SET client_min_messages = warning;
-+SET row_security = off;
-+
-+--
-+-- Name: platform; Type: SCHEMA; Schema: -; Owner: -
-+--
-+
-+CREATE SCHEMA platform;
-+
-+
+ 
 +SET default_tablespace = '';
 +
 +SET default_table_access_method = heap;
@@ -3250,7 +3232,6 @@
 +    ADD CONSTRAINT settlement_resource_type_id_fkey FOREIGN KEY (resource_type_id) REFERENCES platform.resource_type(id);
 +
 +
-+--
-+-- PostgreSQL database dump complete
-+--
-+
+ --
+ -- PostgreSQL database dump complete
+ --
