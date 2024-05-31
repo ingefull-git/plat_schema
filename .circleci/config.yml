@@ -93,7 +93,7 @@ jobs:
                 rm << parameters.schema >>/snapshot.sql
               fi
             else
-              rm -rf snapshots
+              
               ls
               echo "Differences found. Creating diff file and commit."
               ls diffs/<< parameters.schema >>
@@ -146,7 +146,7 @@ jobs:
             . venv/bin/activate
             if tool_deployer -e caiso -a deploy -v "<< parameters.version >>" -st all -sch << parameters.schema >> 2>&1 | tee /dev/tty | grep -q 'ERROR'; then
               echo "Deployment failed with errors."
-              exit 1
+            exit 1
             else
               echo "Deployment succeeded."
             fi
@@ -210,6 +210,6 @@ workflows:
           filters:
             tags:
               only: /^v.*/
-          version: v0.1.2
+          version: v0.1.1
           schema: platform
           context: cicd
