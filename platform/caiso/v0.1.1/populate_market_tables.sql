@@ -159,7 +159,7 @@ VALUES
     ON CONFLICT DO NOTHING;
 
 
-COPY asset_telemetry_data
+INSERT INTO asset_telemetry_data
     (id, asset_meter_id, telemetry_value_type_id, process_type_id, read_time, value, created_on)
 VALUES
     (1, 1, 1, 1, '2023-01-26 03:51:15.63+00', 50.3, '2023-01-26 03:51:31.885+00'),
