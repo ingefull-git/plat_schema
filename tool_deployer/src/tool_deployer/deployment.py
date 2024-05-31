@@ -93,7 +93,14 @@ class Deployment:
             self.drop_schema()
 
     def build_plan_path(self):
-        return Path(self.schema) / f"{self.env}" / f"{self.version}_{self.env}.plan.yaml"
+        if "/" in self.env:
+            env_parts = self.env.split("/")
+            return Path(self.schema) / f"{self.version}_{env_parts[0]}_{env_parts[1]}.plan.yaml"
+        else:
+            return Path(self.schema) / f"{self.version}_{self.env}.plan.yaml"
+
+    def build_sql_script_path(self, script_source):
+        return Path(self.schema) / f"{script_source}.sql"
 
     def deploy(self):
         plan_path = self.build_plan_path()
@@ -102,19 +109,19 @@ class Deployment:
 
         with DatabaseConnection(self.config) as conn:
             try:
-                scripts_to_run = plan.get_scripts_to_run(self.steps)
+                scripts_to_run = plan.get_scripts_to_run(plan.steps)
                 self.logger.info(f"Steps to deploy: {len(scripts_to_run)}")
                 self.logger.debug(f"Steps to deploy: {scripts_to_run}")
 
                 for script in scripts_to_run:
-                    sql_script = SQLScript.validate(Path(self.schema) / f"{script['source']}.sql")
+                    sql_script = SQLScript.validate(self.build_sql_script_path(script["source"]))
                     self.logger.debug(f"Script to deploy: {sql_script.path}")
                     self.apply_sql_file(conn, sql_script.script)
                     script["deployed"] = datetime.now().astimezone().isoformat()
                     self.logger.info(
                         f"Deployed step: {script['source']} by {script['author']} on {script['date']}: {script['description']}"
                     )
-                    plan.update(plan_path)  # Update the plan file after each step
+                    plan.update(plan_path)
 
                 conn.commit()
                 self.logger.info(f"Successfully deployed the plan: {self.version}_{self.env}.plan.yaml")
