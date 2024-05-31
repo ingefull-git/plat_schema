@@ -2,6 +2,7 @@
 -- schema: platform
 -- version: v0.1.1
 
+
 BEGIN;
 
 SET search_path TO platform;
@@ -146,6 +147,20 @@ VALUES
     (2, 'live', 'live')
     ON CONFLICT DO NOTHING;
 
+
+INSERT INTO telemetry_value_type
+    (id, name, created_on)
+VALUES
+    (1, 'state of charge', '2022-12-05 06:48:03.14035+00'),
+    (2, 'power in/out (mw)', '2022-12-05 06:48:03.14035+00'),
+    (3, 'state of health', '2022-12-05 06:48:03.14035+00'),
+    (4,	'available charge (mw)', '2022-12-05 06:48:03.14035+00'),
+    (5,	'available charge (mwh)', '2022-12-05 06:48:03.14035+00'),
+    (6,	'available discharge (mw)', '2022-12-05 06:48:03.14035+00'),
+    (7, 'available discharge (mwh)', '2022-12-05 06:48:03.14035+00'),
+    (8,	'commanded power (mw)', '2022-12-05 06:48:03.14035+00'),
+    (9,	'system heartbeat', '2022-12-05 06:48:03.14035+00')
+    ON CONFLICT DO NOTHING;
 
 
 COMMIT;
