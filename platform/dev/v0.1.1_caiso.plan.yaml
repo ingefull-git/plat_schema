@@ -1,7 +1,7 @@
 version: v0.1.1
 kind: plan
 schema: platform
-env: caiso
+env: dev/caiso
 steps:
 - source: base/v0.1.1/add_market_tables
   author: some_name@mail.com
