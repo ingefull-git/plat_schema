@@ -83,7 +83,7 @@
             "program": "${workspaceFolder}/tool_deployer/src/tool_deployer/cli.py",
             "args": [
                 "--env",
-                "caiso",
+                "dev/caiso",
                 "--action",
                 "deploy",
                 "--version",
