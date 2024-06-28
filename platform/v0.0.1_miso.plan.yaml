@@ -1,0 +1,20 @@
+version: v0.1.1
+kind: plan
+schema: platform
+env: dev/miso
+steps:
+- source: base/v0.1.1/add_market_tables
+  author: some_name@mail.com
+  date: 2024-05-30 18:20:00+00:00
+  description: Add initial market tables
+  deployed: null
+- source: base/v0.1.1/populate_reference_tables
+  author: some_name@mail.com
+  date: 2024-05-30 18:20:00+00:00
+  description: Add_reference_tables
+  deployed: null
+- source: dev/miso/v0.1.1/populate_market_tables
+  author: some_name@mail.com
+  date: 2024-05-30 18:20:00+00:00
+  description: Add created_on column
+  deployed: null
